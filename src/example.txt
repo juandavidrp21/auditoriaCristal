@@ -1,0 +1,108 @@
+<!-- App.svelte -->
+<script>
+  import UserProfile from './UserProfile.svelte';
+  import ProductList from './ProductList.svelte';
+
+  // Sample data to pass as props
+  const currentUser = {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'admin'
+  };
+
+  const products = [
+    { id: 1, name: 'Laptop', price: 999.99, inStock: true },
+    { id: 2, name: 'Smartphone', price: 599.99, inStock: false },
+    { id: 3, name: 'Headphones', price: 199.99, inStock: true }
+  ];
+
+  // Function to handle product selection
+  function handleProductSelect(event) {
+    console.log('Selected product:', event.detail);
+  }
+</script>
+
+<main>
+  <UserProfile 
+    user={currentUser} 
+    isEditable={true}
+  />
+  
+  <ProductList 
+    {products} 
+    on:productSelect={handleProductSelect} 
+  />
+</main>
+
+<!-- UserProfile.svelte -->
+<script>
+  // Props with default values and type checking
+  export let user = {
+    id: null,
+    name: 'Guest',
+    email: '',
+    role: 'user'
+  };
+
+  export let isEditable = false;
+
+  // Computed property
+  $: isAdmin = user.role === 'admin';
+
+  // Method to simulate user update
+  function updateUser() {
+    if (isEditable) {
+      console.log('Updating user:', user);
+      // In a real app, you'd call an update method
+    }
+  }
+</script>
+
+<div class="user-profile">
+  <h2>{user.name}</h2>
+  <p>Email: {user.email}</p>
+  {#if isAdmin}
+    <span class="admin-badge">Admin</span>
+  {/if}
+  {#if isEditable}
+    <button on:click={updateUser}>Edit Profile</button>
+  {/if}
+</div>
+
+<!-- ProductList.svelte -->
+<script>
+  import { createEventDispatcher } from 'svelte';
+
+  // Props with type checking
+  export let products = [];
+
+  // Event dispatcher for custom events
+  const dispatch = createEventDispatcher();
+
+  // Method to select a product
+  function selectProduct(product) {
+    dispatch('productSelect', product);
+  }
+</script>
+
+<div class="product-list">
+  {#each products as product (product.id)}
+    <div 
+      class="product-item" 
+      class:out-of-stock={!product.inStock}
+      on:click={() => selectProduct(product)}
+    >
+      <h3>{product.name}</h3>
+      <p>Price: ${product.price}</p>
+      <p>{product.inStock ? 'In Stock' : 'Out of Stock'}</p>
+    </div>
+  {/each}
+</div>
+
+<style>
+  .out-of-stock {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>
