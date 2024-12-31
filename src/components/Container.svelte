@@ -2,7 +2,7 @@
   import { writable, get } from "svelte/store";
   import Input from "../shareComponents/Input.svelte";
 
-  let page = writable(2);
+  let page = writable(4);
 
   const handleBack = () => {
     if ($page > 1) {
@@ -20,6 +20,18 @@
     }
   };
 
+  let edit = writable(false);
+
+  const handleEdit = (id, key, keyNew) => {
+    key.subscribe((lista) => {
+      const registro = lista.find((reg) => reg.id === id);
+      if (registro) {
+        keyNew.set({ ...registro });
+        edit.set(true);
+      }
+    });
+  };
+
   /*------------------Talla------------------------*/
   let dataTalla = writable([]);
   let dataTallaNew = writable({
@@ -30,18 +42,16 @@
     unidades: "",
   });
 
-  let ediTalla = writable(false);
-  
   const addTalla = (e) => {
     e.preventDefault();
     const newTalla = get(dataTallaNew);
-    if ($ediTalla) {
+    if ($edit) {
       dataTalla.update((lista) =>
         lista.map((reg) =>
           reg.id === $dataTallaNew.id ? { ...$dataTallaNew } : reg
         )
       );
-      console.log("Prueba a ver" + $ediTalla);
+      console.log("Prueba a ver" + $edit);
       dataTallaNew.set({
         id: Date.now(),
         color: "",
@@ -49,7 +59,7 @@
         talla: "",
         unidades: "",
       });
-      ediTalla.set(false);
+      edit.set(false);
     } else if (
       newTalla.color &&
       newTalla.und_x_color &&
@@ -64,26 +74,14 @@
         talla: "",
         unidades: "",
       });
-      console.log("Prueba de data completa: "+$dataTalla);
-      
+      console.log("Prueba de data completa: " + $dataTalla);
     } else {
       alert("¡Todos los campos son obligatorios!");
     }
   };
 
-  const editTalla = (id) => {
-    dataTalla.subscribe((lista) => {
-      const registro = lista.find((reg) => reg.id === id);
-      if (registro) {
-        dataTallaNew.set({ ...registro });
-        ediTalla.set(true);
-      }
-    });
-  };
-
   const deleteTalla = (id) => {
     dataTalla.update((tallas) => tallas.filter((talla) => talla.id !== id));
-    console.log($dataTalla);
   };
 
   /*------------------Confección------------------------*/
@@ -102,8 +100,6 @@
     RR: false,
     unidades: "",
   });
-
-  let ediConfeccion = writable(false);
 
   const KeyChecks = {
     A: "R",
@@ -129,10 +125,10 @@
   const addConfeccion = (e) => {
     e.preventDefault();
     const newConfeccion = get(dataConfeccionNew);
-    if (ediConfeccion) {
-      dataConfeccion.update((lista) => 
-        lista.map((reg) => 
-        reg.id === $dataConfeccionNew.id ? {...$dataConfeccionNew} : reg
+    if ($edit) {
+      dataConfeccion.update((lista) =>
+        lista.map((reg) =>
+          reg.id === $dataConfeccionNew.id ? { ...$dataConfeccionNew } : reg
         )
       );
       dataConfeccionNew.set({
@@ -148,8 +144,8 @@
         RR: false,
         unidades: "",
       });
-      ediConfeccion.set(false);
-    }else if (
+      edit.set(false);
+    } else if (
       newConfeccion.tamañoMuestra &&
       newConfeccion.descripcion &&
       (newConfeccion.A || newConfeccion.R) &&
@@ -179,20 +175,8 @@
   };
 
   const deleteConfeccion = (id) => {
-    dataConfeccion.update((confeccion) =>
-      confeccion.filter((data) => data.id !== id)
-    );
+    dataConfeccion.update((confec) => confec.filter((data) => data.id !== id));
   };
-
-  const editConfeccion = (id) =>{
-    dataConfeccion.subscribe((lista) => {
-      const registro = lista.find((reg) => reg.id === id);
-      if (registro) {
-        dataConfeccionNew.set({ ...registro });
-        ediConfeccion.set(true);
-      }
-    });
-  }
 
   /*------------------Guarda el formulario completo------------------------*/
   let dataAll = writable({
@@ -344,11 +328,11 @@
       <div class={$page === 2 ? "steps-item-active" : "steps-item"}>
         <div class="Tallas">
           <h2
-            style={$ediTalla
+            style={$edit
               ? "font-size: 16px; color: white; background-color:lightcoral; border-radius:5px; border:2px solid red;text-align:center;"
               : ""}
           >
-            {$ediTalla ? "Editando registro" : ""}
+            {$edit ? "Editando registro" : ""}
           </h2>
           <div onsubmit={addTalla} class="Tallas-form">
             <div class="Tallas-form-input">
@@ -403,7 +387,9 @@
                       type="button"
                       class="edit"
                       value="✎"
-                      onclick={(e) => editTalla(tallas.id)}
+                      onclick={(e) => {
+                        handleEdit(tallas.id, dataTalla, dataTallaNew);
+                      }}
                     />
                     <input
                       type="button"
@@ -600,17 +586,19 @@
                     type="button"
                     class="edit"
                     value="✎"
-                    onclick={
-                      e => {
-                        editConfeccion(confeccion.id);
-                      }
-                    }
+                    onclick={(e) => {
+                      handleEdit(
+                        confeccion.id,
+                        dataConfeccion,
+                        dataConfeccionNew
+                      );
+                    }}
                   />
                   <input
                     type="button"
                     class="delete"
                     value="X"
-                    onclick={e => {
+                    onclick={(e) => {
                       deleteConfeccion(confeccion.id);
                     }}
                   />
