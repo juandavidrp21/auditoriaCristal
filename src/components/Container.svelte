@@ -85,7 +85,6 @@
   };
 
   /*------------------Confección------------------------*/
-
   let dataConfeccion = writable([]);
   let dataConfeccionNew = writable({
     id: Date.now(),
