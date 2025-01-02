@@ -2,7 +2,7 @@
   import { writable, get } from "svelte/store";
   import Input from "../shareComponents/Input.svelte";
 
-  let page = writable(4);
+  let page = writable(1);
 
   const handleBack = () => {
     if ($page > 1) {
@@ -32,6 +32,10 @@
     });
   };
 
+  const handleDelete = (id, key) => {
+    key((lista) => lista.filter((reg) => reg.id !== id));
+  };
+
   /*------------------Talla------------------------*/
   let dataTalla = writable([]);
   let dataTallaNew = writable({
@@ -51,7 +55,6 @@
           reg.id === $dataTallaNew.id ? { ...$dataTallaNew } : reg
         )
       );
-      console.log("Prueba a ver" + $edit);
       dataTallaNew.set({
         id: Date.now(),
         color: "",
@@ -74,14 +77,9 @@
         talla: "",
         unidades: "",
       });
-      console.log("Prueba de data completa: " + $dataTalla);
     } else {
       alert("¡Todos los campos son obligatorios!");
     }
-  };
-
-  const deleteTalla = (id) => {
-    dataTalla.update((tallas) => tallas.filter((talla) => talla.id !== id));
   };
 
   /*------------------Confección------------------------*/
@@ -91,39 +89,16 @@
     tamañoMuestra: "",
     descripcion: "",
     totalesDefectuosas: "",
-    A: false,
-    R: false,
-    pinBlando: false,
-    pinDuro: false,
-    AA: false,
-    RR: false,
+    group1: "",
+    group2: "",
+    group3: "",
     unidades: "",
   });
-
-  const KeyChecks = {
-    A: "R",
-    R: "A",
-    Blando: "pinDuro",
-    Duro: "pinBlando",
-    AA: "RR",
-    RR: "AA",
-  };
-
-  const handleCheck = (key) => {
-    const opposKey = KeyChecks[key];
-    if (opposKey) {
-      dataConfeccionNew.update((data) => {
-        return {
-          ...data,
-          [opposKey]: false,
-        };
-      });
-    }
-  };
 
   const addConfeccion = (e) => {
     e.preventDefault();
     const newConfeccion = get(dataConfeccionNew);
+
     if ($edit) {
       dataConfeccion.update((lista) =>
         lista.map((reg) =>
@@ -135,23 +110,19 @@
         tamañoMuestra: "",
         descripcion: "",
         totalesDefectuosas: "",
-        A: false,
-        R: false,
-        pinBlando: false,
-        pinDuro: false,
-        AA: false,
-        RR: false,
+        group1: "",
+        group2: "",
+        group3: "",
         unidades: "",
       });
       edit.set(false);
     } else if (
       newConfeccion.tamañoMuestra &&
       newConfeccion.descripcion &&
-      (newConfeccion.A || newConfeccion.R) &&
-      (newConfeccion.AA || newConfeccion.RR) &&
+      newConfeccion.group1 &&
       newConfeccion.totalesDefectuosas &&
-      (newConfeccion.pinBlando || newConfeccion.pinDuro) &&
-      (newConfeccion.AA || newConfeccion.RR) &&
+      newConfeccion.group2 &&
+      newConfeccion.group3 &&
       newConfeccion.unidades
     ) {
       dataConfeccion.update((data) => [...data, newConfeccion]);
@@ -160,12 +131,9 @@
         tamañoMuestra: "",
         descripcion: "",
         totalesDefectuosas: "",
-        A: false,
-        R: false,
-        pinBlando: false,
-        pinDuro: false,
-        AA: false,
-        RR: false,
+        group1: "",
+        group2: "",
+        group3: "",
         unidades: "",
       });
     } else {
@@ -173,8 +141,112 @@
     }
   };
 
-  const deleteConfeccion = (id) => {
-    dataConfeccion.update((confec) => confec.filter((data) => data.id !== id));
+  /*------------------Medidas------------------------*/
+  let dataMedida = writable([]);
+  let dataMedidaNew = writable({
+    id: Date.now(),
+    tamañoMuestra: "",
+    group1: "",
+    descripcion: "",
+    totalesDefectuosas: "",
+    group2: "",
+    unidades: "",
+  });
+
+  const addMedida = (e) => {
+    e.preventDefault();
+    const newDataMedida = get(dataMedidaNew);
+    if ($edit) {
+      dataMedida.update((lista) =>
+        lista.map((reg) =>
+          reg.id === $dataMedidaNew.id ? { ...$dataMedidaNew } : reg
+        )
+      );
+      dataMedidaNew.set({
+        id: Date.now(),
+        tamañoMuestra: "",
+        group1: "",
+        descripcion: "",
+        totalesDefectuosas: "",
+        group2: "",
+        unidades: "",
+      });
+      edit.set(false);
+    } else if (
+      newDataMedida.tamañoMuestra &&
+      newDataMedida.descripcion &&
+      newDataMedida.totalesDefectuosas &&
+      newDataMedida.unidades &&
+      newDataMedida.group1 &&
+      newDataMedida.group2
+    ) {
+      dataMedida.update((data) => [...data, newDataMedida]);
+      dataMedidaNew.set({
+        id: Date.now(),
+        tamañoMuestra: "",
+        group1: "",
+        descripcion: "",
+        totalesDefectuosas: "",
+        group2: "",
+        unidades: "",
+      });
+    } else {
+      alert("¡Todos los campos son obligatorios!");
+    }
+  };
+
+  /*------------------Empaque------------------------*/
+  let dataEmpaque = writable([]);
+  let dataEmpaqueNew = writable({
+    id: Date.now(),
+    tamañoMuestra: "",
+    groupCheck: "",
+    totalesCajas: "",
+    raizCajas: "",
+    codigosCajas: "",
+    descripcionDefecto: "",
+  });
+
+  const addEmpaque = (e) => {
+    e.preventDefault();
+    const newDataEmpaque = get(dataEmpaqueNew);
+    if ($edit) {
+      dataEmpaque.update((lista) =>
+        lista.map((reg) =>
+          reg.id === $dataEmpaqueNew.id ? { ...$dataEmpaqueNew } : reg
+        )
+      );
+      dataEmpaqueNew.set({
+        id: Date.now(),
+        tamañoMuestra: "",
+        groupCheck: "",
+        totalesCajas: "",
+
+        raizCajas: "",
+        codigosCajas: "",
+        descripcionDefecto: "",
+      });
+    } else if (
+      newDataEmpaque.tamañoMuestra &&
+      newDataEmpaque.groupCheck &&
+      newDataEmpaque.totalesCajas &&
+      newDataEmpaque.raizCajas &&
+      newDataEmpaque.codigosCajas &&
+      newDataEmpaque.descripcionDefecto
+    ) {
+      dataEmpaque.update((data) => [...data, newDataEmpaque]);
+      dataEmpaqueNew.set({
+        id: Date.now(),
+        tamañoMuestra: "",
+        groupCheck: "",
+        totalesCajas: "",
+        raizCajas: "",
+        codigosCajas: "",
+        descripcionDefecto: "",
+      });
+    } else {
+      alert("¡Todos los campos son obligatorios!");
+    }
   };
 
   /*------------------Guarda el formulario completo------------------------*/
@@ -192,13 +264,41 @@
     horaFinal: "",
     tipoPrenda: "",
     po: "",
-    tallas: [],
+    composicionCheck: "",
+    proveedorCertificadoCheck: "",
+    cuidadosCheck: "",
+    pictogramaCheck: "",
+    codeSiCheck: "",
+    pvpCheck: "",
+    codePumCheck: "",
+    elongacionCheck: "",
+    LaboratorioCheck: "",
+    segundoTesteoCheck: "",
+    aprobadoCheck: "",
+    compIncorrecta: "",
+    ventaPublico: "",
+    ventaSap: "",
+    cant1: "",
+    cant2: "",
+    cant3: "",
+    color: "",
+    talla: "",
+    filete: "",
+    realce: "",
+    costura: "",
+    observaciones: "",
   });
 
   function handleSubmit(e) {
     e.preventDefault();
     dataAll.update((current) => {
-      return { ...current, tallas: $dataTalla };
+      return {
+        ...current,
+        tallas: $dataTalla,
+        confeccion: $dataConfeccion,
+        medidas: $dataMedida,
+        empaque: $dataEmpaque,
+      };
     });
     console.log($dataAll);
   }
@@ -260,7 +360,7 @@
                 bind:value={$dataAll.entrega}
                 id="entrega"
               />
-
+      
               <Input
                 text="IMPORTACIÓN:"
                 type="text"
@@ -268,7 +368,7 @@
                 id="importacion"
               />
             </div>
-
+      
             <div class="Proveedor-mid">
               <Input
                 text="FECHA:"
@@ -276,7 +376,7 @@
                 bind:value={$dataAll.fecha}
                 id="fecha"
               />
-
+      
               <Input
                 text="MARCA:"
                 type="text"
@@ -296,7 +396,7 @@
                 id="individual"
               />
             </div>
-
+      
             <div class="Proveedor-end">
               <Input
                 text="HORA INICIO:"
@@ -304,14 +404,14 @@
                 bind:value={$dataAll.horaInicio}
                 id="horaInicio"
               />
-
+      
               <Input
                 text="HORA FINAL:"
                 type="time"
                 bind:value={$dataAll.horaFinal}
                 id="horaFinal"
               />
-
+      
               <Input
                 text="TIPO PRENDA:"
                 type="text"
@@ -321,18 +421,11 @@
               <Input text="PO:" type="text" bind:value={$dataAll.po} id="po" />
             </div>
           </div>
-        </div>
+      </div>
       </div>
 
       <div class={$page === 2 ? "steps-item-active" : "steps-item"}>
         <div class="Tallas">
-          <h2
-            style={$edit
-              ? "font-size: 16px; color: white; background-color:lightcoral; border-radius:5px; border:2px solid red;text-align:center;"
-              : ""}
-          >
-            {$edit ? "Editando registro" : ""}
-          </h2>
           <div onsubmit={addTalla} class="Tallas-form">
             <div class="Tallas-form-input">
               <Input
@@ -371,6 +464,7 @@
             <p>Und x color <i class="fa-solid fa-arrow-down"></i></p>
             <p>Talla <i class="fa-solid fa-arrow-down"></i></p>
             <p>Unidades <i class="fa-solid fa-arrow-down"></i></p>
+            <div class="options"></div>
           </div>
           <div class="Talla-container-table">
             {#if $dataTalla.length > 0}
@@ -380,9 +474,8 @@
                   <p>{tallas.und_x_color}</p>
                   <p>{tallas.talla}</p>
                   <p>{tallas.unidades}</p>
-                  <div>
+                  <div class="options">
                     <input
-                      style="font-size: 11px;"
                       type="button"
                       class="edit"
                       value="✎"
@@ -394,7 +487,7 @@
                       type="button"
                       class="delete"
                       value="X"
-                      onclick={(e) => deleteTalla(tallas.id)}
+                      onclick={(e) => handleDelete(tallas.id, dataTalla.update)}
                     />
                   </div>
                 </div>
@@ -421,21 +514,23 @@
                   />
                 </div>
                 <div class="Confeccion-form-checkbox-one">
-                  <label for="aql">A</label>
+                  <label for="A">A</label>
                   <input
-                    bind:checked={$dataConfeccionNew.A}
-                    type="checkbox"
+                    bind:group={$dataConfeccionNew.group1}
+                    type="radio"
+                    name="gr-1"
                     class="Chexbox-style"
-                    id="aql"
-                    onchange={(e) => handleCheck("A")}
+                    value="A"
+                    id="A"
                   />
-                  <label for="aql">R</label>
+                  <label for="R">R</label>
                   <input
-                    bind:checked={$dataConfeccionNew.R}
-                    type="checkbox"
+                    bind:group={$dataConfeccionNew.group1}
+                    type="radio"
+                    name="gr-1"
                     class="Chexbox-style"
-                    id="aql"
-                    onchange={(e) => handleCheck("R")}
+                    id="R"
+                    value="R"
                   />
                 </div>
                 <div class="Confeccion-form-group-one-right">
@@ -461,37 +556,41 @@
                 <div class="Confeccion-form-checkbox-two">
                   <label for="pin-blando">Pin <br />Blando</label>
                   <input
-                    type="checkbox"
+                    bind:group={$dataConfeccionNew.group2}
+                    type="radio"
+                    name="gr-2"
                     class="Chexbox-style"
                     id="pin-blando"
-                    bind:checked={$dataConfeccionNew.pinBlando}
-                    onchange={(e) => handleCheck("Blando")}
+                    value="Blando"
                   />
                   <label for="pin-duro">Pin <br />Duro</label>
                   <input
-                    bind:checked={$dataConfeccionNew.pinDuro}
-                    type="checkbox"
+                    bind:group={$dataConfeccionNew.group2}
+                    type="radio"
+                    name="gr-2"
                     class="Chexbox-style"
                     id="pin-duro"
-                    onchange={(e) => handleCheck("Duro")}
+                    value="Duro"
                   />
                 </div>
                 <div class="Confeccion-form-checkbox-three">
-                  <label for="ar">A</label>
+                  <label for="AA">A</label>
                   <input
-                    bind:checked={$dataConfeccionNew.AA}
-                    type="checkbox"
+                    bind:group={$dataConfeccionNew.group3}
+                    type="radio"
+                    name="gr-3"
                     class="Chexbox-style"
-                    id="ar"
-                    onchange={(e) => handleCheck("AA")}
+                    value="AA"
+                    id="AA"
                   />
-                  <label for="ar">R</label>
+                  <label for="RR">R</label>
                   <input
-                    bind:checked={$dataConfeccionNew.RR}
-                    type="checkbox"
+                    bind:group={$dataConfeccionNew.group3}
+                    type="radio"
+                    name="gr-3"
                     class="Chexbox-style"
-                    id="ar"
-                    onchange={(e) => handleCheck("RR")}
+                    value="RR"
+                    id="RR"
                   />
                 </div>
                 <div class="Confeccion-form-group-two-right">
@@ -530,80 +629,82 @@
                 style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
               >
                 ...
-              </div>
+            </div>
             </div>
             {#each $dataConfeccion as confeccion}
-              <div class="Confeccion-container-table">
+            <div class="Confeccion-container-table">
                 <div class="title-one">
                   <p class="title-text">{confeccion.tamañoMuestra}</p>
                 </div>
-                <div class="Confeccion-title-two">
-                  <input
-                    bind:checked={confeccion.A}
-                    type="checkbox"
-                    class="Chexbox-style"
-                    id="check-all"
-                    disabled
-                  />
-                  <input
-                    bind:checked={confeccion.R}
-                    type="checkbox"
-                    class="Chexbox-style"
-                    id="check-all"
-                    disabled
-                  />
-                </div>
+                  <div class="Confeccion-title-two">
+                    <input
+                      type="radio"
+                      class="Chexbox-style"
+                      id="A"
+                      disabled
+                      checked={confeccion.group1 === "A"}
+                    />
+                    <input
+                      type="radio"
+                      class="Chexbox-style"
+                      id="R"
+                      disabled
+                      checked={confeccion.group1 === "R"}
+                    />
+                  </div>
                 <div class="Confeccion-title-three">
                   <p class="title-text">{confeccion.totalesDefectuosas}</p>
                   <p class="title-text">
                     {confeccion.pinDuro ? "Duro" : "Blando"}
-                  </p>
+                    </p>
                 </div>
-                <div class="Confeccion-title-four">
-                  <input
-                    bind:checked={confeccion.AA}
-                    type="checkbox"
-                    class="Chexbox-style"
-                    id="check-all"
-                    disabled
-                  />
-                  <input
-                    bind:checked={confeccion.RR}
-                    type="checkbox"
-                    class="Chexbox-style"
-                    id="check-all"
-                    disabled
-                  />
-                </div>
+                  <div class="Confeccion-title-four">
+                    <input
+                      type="radio"
+                      class="Chexbox-style"
+                      id="check-all"
+                      value="AA"
+                      disabled
+                      checked={confeccion.group3 === "AA"}
+                    />
+                    <input
+                      type="radio"
+                      class="Chexbox-style"
+                      id="check-all"
+                      value="RR"
+                      disabled
+                      checked={confeccion.group3 === "RR"}
+                    />
+                  </div>
                 <p class="title-text-description">{confeccion.descripcion}</p>
                 <p class="title-text-unidades">{confeccion.unidades}</p>
                 <div
                   style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
                 >
-                  <input
+                    <input
                     style="font-size: 11px;"
-                    type="button"
-                    class="edit"
-                    value="✎"
-                    onclick={(e) => {
-                      handleEdit(
-                        confeccion.id,
-                        dataConfeccion,
-                        dataConfeccionNew
-                      );
-                    }}
-                  />
-                  <input
-                    type="button"
-                    class="delete"
-                    value="X"
-                    onclick={(e) => {
-                      deleteConfeccion(confeccion.id);
-                    }}
-                  />
+                      type="button"
+                      class="edit"
+                      value="✎"
+                      onclick={(e) => {
+                        handleEdit(
+                          confeccion.id,
+                          dataConfeccion,
+                          dataConfeccionNew
+                        );
+                      }}
+                    />
+                    <input
+                      type="button"
+                      class="delete"
+                      value="X"
+                      onclick={(e) => {
+                        handleDelete(confeccion.id, dataConfeccion.update);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            {/each}
+              {/each}
           </div>
         </div>
       </div>
@@ -612,75 +713,89 @@
         <div class="Medidas">
           <p class="Medidas-title">Medidas: Nivel inspec: 1 ó s-4</p>
           <div class="Medidas-content">
-            <div class="Medidas-form-group-one">
-              <div class="Medidas-form-group-one-left">
-                <Input
-                  type="text"
-                  text="Tamaño muestra"
-                  value=""
-                  id="tamaño-muestra"
-                />
+            <div onsubmit={addMedida}>
+              <div class="Medidas-form-group-one">
+                <div class="Medidas-form-group-one-left">
+                  <Input
+                    type="text"
+                    text="Tamaño muestra"
+                    id="tamañoMuestra"
+                    bind:value={$dataMedidaNew.tamañoMuestra}
+                  />
+                </div>
+                <div class="Medidas-form-checkbox-one">
+                  <label for="AMedida">A</label>
+                  <input
+                    type="radio"
+                    class="Chexbox-style"
+                    name="group1"
+                    id="A"
+                    value="A"
+                    bind:group={$dataMedidaNew.group1}
+                  />
+                  <label for="RMedida">R</label>
+                  <input
+                    type="radio"
+                    class="Chexbox-style"
+                    name="group1"
+                    id="R"
+                    value="R"
+                    bind:group={$dataMedidaNew.group1}
+                  />
+                </div>
+                <div class="Medidas-form-group-one-right">
+                  <Input
+                    type="text"
+                    text="Descripción de defecto"
+                    bind:value={$dataMedidaNew.descripcion}
+                    id="descripcion"
+                  />
+                </div>
               </div>
-              <div class="Medidas-form-checkbox-one">
-                <label for="aql">A</label>
-                <input
-                  type="checkbox"
-                  class="Chexbox-style"
-                  name="aql"
-                  id="aql"
-                />
-                <label for="aql">R</label>
-                <input
-                  type="checkbox"
-                  class="Chexbox-style"
-                  name="aql"
-                  id="aql"
-                />
-              </div>
-              <div class="Medidas-form-group-one-right">
-                <Input
-                  type="text"
-                  text="Descripción de defecto"
-                  value=""
-                  id="descripcion"
-                />
-              </div>
-            </div>
 
-            <div class="Medidas-form-group-two">
-              <div class="Medidas-form-group-two-left">
-                <Input
-                  type="text"
-                  text="Unid. total problemas de medidas"
-                  value=""
-                  id="total-problemas"
-                />
-              </div>
-              <div class="Medidas-form-checkbox-three">
-                <label for="ar">A</label>
-                <input
-                  type="checkbox"
-                  class="Chexbox-style"
-                  name="ar"
-                  id="ar"
-                />
-                <label for="ar">R</label>
-                <input
-                  type="checkbox"
-                  class="Chexbox-style"
-                  name="ar"
-                  id="ar"
-                />
-              </div>
-              <div class="Medidas-form-group-two-right">
-                <Input type="text" text="Unidades" value="" id="unidades" />
-                <button>+</button>
+              <div class="Medidas-form-group-two">
+                <div class="Medidas-form-group-two-left">
+                  <Input
+                    type="number"
+                    text="Unid. total problemas de medidas"
+                    bind:value={$dataMedidaNew.totalesDefectuosas}
+                    id="totalesDefectuosas"
+                  />
+                </div>
+                <div class="Medidas-form-checkbox-three">
+                  <label for="AA">A</label>
+                  <input
+                    type="radio"
+                    name="group2"
+                    class="Chexbox-style"
+                    id="AA"
+                    value="AA"
+                    bind:group={$dataMedidaNew.group2}
+                  />
+                  <label for="RR">R</label>
+                  <input
+                    type="radio"
+                    name="group2"
+                    class="Chexbox-style"
+                    id="RR"
+                    value="RR"
+                    bind:group={$dataMedidaNew.group2}
+                  />
+                </div>
+                <div class="Medidas-form-group-two-right">
+                  <Input
+                    type="number"
+                    text="Unidades"
+                    bind:value={$dataMedidaNew.unidades}
+                    id="unidades"
+                  />
+                  <button type="button" onclick={addMedida}>+</button>
+                </div>
               </div>
             </div>
 
             <div class="Medidas-container-title">
               <div class="Medidas-title-one">
-                <input type="checkbox" class="Chexbox-style" id="check-all" />
                 <p class="Medidas-title-text">
                   Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
                 </p>
@@ -698,28 +813,81 @@
               </div>
               <p class="Medidas-title-text-description">Descripción</p>
               <p class="Medidas-title-text-unidades">Unidades x Descrip</p>
+              <div
+                style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
+              >
+                ...
+              </div>
             </div>
-            {#each Array(3)}
+            {#each $dataMedida as medida}
               <div class="Medidas-container-table">
                 <div class="Medidas-title-one">
-                  <input type="checkbox" class="Chexbox-style" id="check-all" />
-                  <p class="Medidas-title-text">XS</p>
+                  <p class="Medidas-title-text">{medida.tamañoMuestra}</p>
                 </div>
                 <div class="Medidas-title-two">
-                  <input type="checkbox" class="Chexbox-style" id="check-all" />
-                  <input type="checkbox" class="Chexbox-style" id="check-all" />
+                  <input
+                    type="radio"
+                    class="Chexbox-style"
+                    id="A"
+                    value="A"
+                    disabled
+                    checked={medida.group1 === "A"}
+                  />
+                  <input
+                    type="radio"
+                    class="Chexbox-style"
+                    id="R"
+                    value="R"
+                    disabled
+                    checked={medida.group1 === "R"}
+                  />
                 </div>
                 <div class="Medidas-title-three">
-                  <p class="Medidas-title-text">1200</p>
+                  <p class="Medidas-title-text">{medida.totalesDefectuosas}</p>
                 </div>
                 <div class="Medidas-title-four">
-                  <input type="checkbox" class="Chexbox-style" id="check-all" />
-                  <input type="checkbox" class="Chexbox-style" id="check-all" />
+                  <input
+                    type="radio"
+                    class="Chexbox-style"
+                    id="AA"
+                    value="AA"
+                    disabled
+                    checked={medida.group2 === "AA"}
+                  />
+                  <input
+                    type="radio"
+                    class="Chexbox-style"
+                    id="RR"
+                    value="RR"
+                    disabled
+                    checked={medida.group2 === "RR"}
+                  />
                 </div>
                 <p class="Medidas-title-text-description">
-                  Descripción del daño o ajustes que se deben hacer
+                  {medida.descripcion}
                 </p>
-                <p class="Medidas-title-text-unidades">4</p>
+                <p class="Medidas-title-text-unidades">{medida.unidades}</p>
+                <div
+                  style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
+                >
+                  <input
+                    style="font-size: 11px;"
+                    type="button"
+                    class="edit"
+                    value="✎"
+                    onclick={(e) => {
+                      handleEdit(medida.id, dataMedida, dataMedidaNew);
+                    }}
+                  />
+                  <input
+                    type="button"
+                    class="delete"
+                    value="X"
+                    onclick={(e) => {
+                      handleDelete(medida.id, dataMedida.update);
+                    }}
+                  />
+                </div>
               </div>
             {/each}
           </div>
@@ -736,43 +904,47 @@
                   <Input
                     type="text"
                     text="Tamaño muestra"
-                    value=""
+                    bind:value={$dataEmpaqueNew.tamañoMuestra}
                     id="tamaño-muestra"
                   />
                 </div>
                 <div class="Empaque-form-checkbox-one">
-                  <label for="aql">A</label>
+                  <label for="A">A</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    name="groupCheck"
+                    value="A"
                     class="Chexbox-style"
-                    name="aql"
-                    id="aql"
+                    bind:group={$dataEmpaqueNew.groupCheck}
+                    id="A"
                   />
-                  <label for="aql">R</label>
+                  <label for="R">R</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    name="groupCheck"
+                    value="R"
                     class="Chexbox-style"
-                    name="aql"
-                    id="aql"
+                    bind:group={$dataEmpaqueNew.groupCheck}
+                    id="R"
                   />
                 </div>
                 <div class="Empaque-form-group-one-right">
                   <Input
                     type="number"
                     text="Totales Cajas"
-                    value=""
+                    bind:value={$dataEmpaqueNew.totalesCajas}
                     id="totales-cajas"
                   />
                   <Input
                     type="number"
                     text="Raíz + cajas"
-                    value=""
+                    bind:value={$dataEmpaqueNew.raizCajas}
                     id="raiz-cajas"
                   />
                   <Input
                     type="text"
                     text="Códigos de cajas auditadas"
-                    value=""
+                    bind:value={$dataEmpaqueNew.codigosCajas}
                     id="codigos-cajas"
                   />
                 </div>
@@ -783,16 +955,15 @@
                   <Input
                     type="text"
                     text="Descripción de defecto"
-                    value=""
+                    bind:value={$dataEmpaqueNew.descripcionDefecto}
                     id="descripcion-defecto"
                   />
                 </div>
-                <button>+</button>
+                <button type="button" onclick={addEmpaque}>+</button>
               </div>
 
               <div class="Empaque-container-title">
                 <div class="Empaque-title-one">
-                  <input type="checkbox" class="Chexbox-style" id="check-all" />
                   <p class="Empaque-title-text">
                     Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
                   </p>
@@ -822,40 +993,69 @@
                 </div>
 
                 <p class="Empaque-title-text-description">Descripción</p>
+                <div
+                  style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
+                >
+                  ...
+                </div>
               </div>
 
-              {#each Array(3)}
+              {#each $dataEmpaque as empaque}
                 <div class="container-table">
                   <div class="Empaque-title-one">
-                    <input
-                      type="checkbox"
-                      class="Chexbox-style"
-                      id="check-all"
-                    />
-                    <p class="Empaque-title-text">XS</p>
+                    <p class="Empaque-title-text">{empaque.tamañoMuestra}</p>
                   </div>
                   <div class="Empaque-title-two">
                     <input
-                      type="checkbox"
+                      type="radio"
                       class="Chexbox-style"
-                      id="check-all"
+                      id="A"
+                      value="A"
+                      disabled
+                      checked={empaque.groupCheck === "A"}
                     />
                     <input
-                      type="checkbox"
+                      type="radio"
                       class="Chexbox-style"
-                      id="check-all"
+                      id="R"
+                      value="R"
+                      disabled
+                      checked={empaque.groupCheck === "R"}
                     />
                   </div>
                   <div class="Empaque-title-three">
-                    <p class="Empaque-title-text">1200</p>
+                    <p class="Empaque-title-text">{empaque.totalesCajas}</p>
                   </div>
                   <div class="Empaque-title-four">
-                    <p class="Empaque-title-text">1200</p>
+                    <p class="Empaque-title-text">{empaque.raizCajas}</p>
                   </div>
                   <div class="Empaque-title-five">
-                    <p class="Empaque-title-text">AA001</p>
+                    <p class="Empaque-title-text">{empaque.codigosCajas}</p>
                   </div>
-                  <p class="Empaque-title-text-description">Descripción...</p>
+                  <p class="Empaque-title-text-description">
+                    {empaque.descripcionDefecto}
+                  </p>
+                  <div
+                    style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
+                  >
+                    <input
+                      style="font-size: 11px;"
+                      type="button"
+                      class="edit"
+                      value="✎"
+                      onclick={(e) => {
+                        handleEdit(empaque.id, dataEmpaque, dataEmpaqueNew);
+                      }}
+                    />
+                    <input
+                      type="button"
+                      class="delete"
+                      value="X"
+                      onclick={(e) => {
+                        handleDelete(empaque.id, dataEmpaque.update);
+                      }}
+                    />
+                  </div>
                 </div>
               {/each}
             </div>
@@ -873,15 +1073,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="composicionCheck"
+                    bind:group={$dataAll.composicionCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="composicionCheck"
+                    bind:group={$dataAll.composicionCheck}
                   />
                 </div>
               </div>
@@ -891,15 +1097,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="proveedorCertificadoCheck"
+                    bind:group={$dataAll.proveedorCertificadoCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="proveedorCertificadoCheck"
+                    bind:group={$dataAll.proveedorCertificadoCheck}
                   />
                 </div>
               </div>
@@ -909,15 +1121,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="cuidadosCheck"
+                    bind:group={$dataAll.cuidadosCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="cuidadosCheck"
+                    bind:group={$dataAll.cuidadosCheck}
                   />
                 </div>
               </div>
@@ -927,15 +1145,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="pictogramaCheck"
+                    bind:group={$dataAll.pictogramaCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="pictogramaCheck"
+                    bind:group={$dataAll.pictogramaCheck}
                   />
                 </div>
               </div>
@@ -945,15 +1169,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="codeSiCheck"
+                    bind:group={$dataAll.codeSiCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="codeSiCheck"
+                    bind:group={$dataAll.codeSiCheck}
                   />
                 </div>
               </div>
@@ -963,15 +1193,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="pvpCheck"
+                    bind:group={$dataAll.pvpCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="pvpCheck"
+                    bind:group={$dataAll.pvpCheck}
                   />
                 </div>
               </div>
@@ -981,15 +1217,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="codePumCheck"
+                    bind:group={$dataAll.codePumCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="codePumCheck"
+                    bind:group={$dataAll.codePumCheck}
                   />
                 </div>
               </div>
@@ -999,15 +1241,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="elongacionCheck"
+                    bind:group={$dataAll.elongacionCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="elongacionCheck"
+                    bind:group={$dataAll.elongacionCheck}
                   />
                 </div>
               </div>
@@ -1017,15 +1265,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="LaboratorioCheck"
+                    bind:group={$dataAll.LaboratorioCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="LaboratorioCheck"
+                    bind:group={$dataAll.LaboratorioCheck}
                   />
                 </div>
               </div>
@@ -1035,15 +1289,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="segundoTesteoCheck"
+                    bind:group={$dataAll.segundoTesteoCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="segundoTesteoCheck"
+                    bind:group={$dataAll.segundoTesteoCheck}
                   />
                 </div>
               </div>
@@ -1053,15 +1313,21 @@
                 <div class="DetalleEmpaque-left-item-checks">
                   <label for="cumple-composicion-si">Si</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="si"
                     class="Chexbox-style"
-                    id="cumple-composicion-si"
+                    id="si"
+                    name="aprobadoCheck"
+                    bind:group={$dataAll.aprobadoCheck}
                   />
                   <label for="cumple-composicion-no">No</label>
                   <input
-                    type="checkbox"
+                    type="radio"
+                    value="no"
                     class="Chexbox-style"
-                    id="cumple-composicion-no"
+                    id="no"
+                    name="aprobadoCheck"
+                    bind:group={$dataAll.aprobadoCheck}
                   />
                 </div>
               </div>
@@ -1072,33 +1338,58 @@
                 <Input
                   type="text"
                   text="Composición incorrecta"
-                  value=""
-                  id="composicion-incorrecta"
+                  bind:value={$dataAll.compIncorrecta}
+                  id="composicionIncorrecta"
                 />
                 <Input
                   type="text"
                   text="Precio venta al público"
-                  value=""
-                  id="precio-venta-publico"
+                  bind:value={$dataAll.ventaPublico}
+                  id="ventaPublico"
                 />
                 <Input
                   type="text"
                   text="Precio venta SAP"
-                  value=""
-                  id="precio-venta-sap"
+                  bind:value={$dataAll.ventaSap}
+                  id="ventaSap"
                 />
               </div>
               <div class="DetalleEmpaque-right-mid">
                 <p>Cantidad de Muestras:</p>
                 <div class="DetalleEmpaque-mid-inputs">
-                  <Input type="number" text="1" value="" id="1" />
-                  <Input type="number" text="2" value="" id="2" />
-                  <Input type="number" text="3" value="" id="3" />
+                  <Input
+                    type="number"
+                    text="1"
+                    bind:value={$dataAll.cant1}
+                    id="cant1"
+                  />
+                  <Input
+                    type="number"
+                    text="2"
+                    bind:value={$dataAll.cant2}
+                    id="cant2"
+                  />
+                  <Input
+                    type="number"
+                    text="3"
+                    bind:value={$dataAll.cant3}
+                    id="cant3"
+                  />
                 </div>
               </div>
               <div class="Detalle-Empaque-right-end">
-                <Input type="text" text="Color" value="" id="color" />
-                <Input type="text" text="Talla" value="" id="talla" />
+                <Input
+                  type="text"
+                  text="Color"
+                  bind:value={$dataAll.color}
+                  id="color"
+                />
+                <Input
+                  type="text"
+                  text="Talla"
+                  bind:value={$dataAll.talla}
+                  id="talla"
+                />
               </div>
             </div>
           </div>
@@ -1111,15 +1402,25 @@
             <p class="PPP-title">EmpaqueAQL:0</p>
             <div class="PPP-content">
               <div class="PPP-content-one">
-                <Input type="text" text="Filete" value="" id="filete" />
+                <Input
+                  type="text"
+                  text="Filete"
+                  bind:value={$dataAll.filete}
+                  id="filete"
+                />
 
-                <Input type="text" text="Realce" value="" id="realce" />
+                <Input
+                  type="text"
+                  text="Realce"
+                  bind:value={$dataAll.realce}
+                  id="realce"
+                />
 
                 <Input
                   type="text"
                   text="Costura prenda"
-                  value=""
-                  id="costura-prenda"
+                  bind:value={$dataAll.costura}
+                  id="costura"
                 />
               </div>
 
@@ -1128,12 +1429,16 @@
                   <label class="PPP-text-label" for="observations"
                     >observaciones</label
                   >
-                  <textarea class="PPP-text-input" id="observations"></textarea>
+                  <textarea
+                    class="PPP-text-input"
+                    id="observations"
+                    bind:value={$dataAll.observaciones}
+                  ></textarea>
                 </div>
               </div>
-              <button onclick={handleSubmit} type="button" class="PPP-Guardar"
-                >Guardar</button
-              >
+              <button onclick={handleSubmit} type="button" class="PPP-Guardar">
+                Guardar
+              </button>
             </div>
           </div>
         </div>
@@ -1338,13 +1643,34 @@
   }
   .delete:hover {
     cursor: pointer;
-    background-color: lightcoral;
+    background-color: rgb(165, 80, 80);
     color: white;
     border: 2px solid red;
     border-radius: 5px;
   }
   .edit:hover {
     cursor: pointer;
+    background-color: rgb(61, 117, 61);
+    color: white;
+    border: 2px solid green;
+    border-radius: 5px;
+  }
+  .edit,
+  .delete {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    background-color: #00b0a7;
+  }
+  .options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 70px;
   }
 
   .Medidas,
