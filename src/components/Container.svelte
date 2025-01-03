@@ -1,6 +1,10 @@
 <script>
   import { writable, get } from "svelte/store";
   import Input from "../shareComponents/Input.svelte";
+  import Proveedor from "./Proveedor.svelte";
+  import Tallas from "./Tallas.svelte";
+  import Confeccion from "./Confeccion.svelte";
+  import Medidas from "./Medidas.svelte";
 
   let page = writable(1);
 
@@ -36,7 +40,21 @@
     key((lista) => lista.filter((reg) => reg.id !== id));
   };
 
-  /*------------------Talla------------------------*/
+  let dataProveedor = writable({
+    proveedor: "",
+    referencia: "",
+    entrega: "",
+    importacion: "",
+    fecha: "",
+    marca: "",
+    ppk: "",
+    individual: "",
+    horaInicio: "",
+    horaFinal: "",
+    tipoPrenda: "",
+    po: "",
+  });
+
   let dataTalla = writable([]);
   let dataTallaNew = writable({
     id: Date.now(),
@@ -46,43 +64,6 @@
     unidades: "",
   });
 
-  const addTalla = (e) => {
-    e.preventDefault();
-    const newTalla = get(dataTallaNew);
-    if ($edit) {
-      dataTalla.update((lista) =>
-        lista.map((reg) =>
-          reg.id === $dataTallaNew.id ? { ...$dataTallaNew } : reg
-        )
-      );
-      dataTallaNew.set({
-        id: Date.now(),
-        color: "",
-        und_x_color: "",
-        talla: "",
-        unidades: "",
-      });
-      edit.set(false);
-    } else if (
-      newTalla.color &&
-      newTalla.und_x_color &&
-      newTalla.talla &&
-      newTalla.unidades
-    ) {
-      dataTalla.update((tallas) => [...tallas, newTalla]);
-      dataTallaNew.set({
-        id: Date.now(),
-        color: "",
-        und_x_color: "",
-        talla: "",
-        unidades: "",
-      });
-    } else {
-      alert("¡Todos los campos son obligatorios!");
-    }
-  };
-
-  /*------------------Confección------------------------*/
   let dataConfeccion = writable([]);
   let dataConfeccionNew = writable({
     id: Date.now(),
@@ -95,53 +76,6 @@
     unidades: "",
   });
 
-  const addConfeccion = (e) => {
-    e.preventDefault();
-    const newConfeccion = get(dataConfeccionNew);
-
-    if ($edit) {
-      dataConfeccion.update((lista) =>
-        lista.map((reg) =>
-          reg.id === $dataConfeccionNew.id ? { ...$dataConfeccionNew } : reg
-        )
-      );
-      dataConfeccionNew.set({
-        id: Date.now(),
-        tamañoMuestra: "",
-        descripcion: "",
-        totalesDefectuosas: "",
-        group1: "",
-        group2: "",
-        group3: "",
-        unidades: "",
-      });
-      edit.set(false);
-    } else if (
-      newConfeccion.tamañoMuestra &&
-      newConfeccion.descripcion &&
-      newConfeccion.group1 &&
-      newConfeccion.totalesDefectuosas &&
-      newConfeccion.group2 &&
-      newConfeccion.group3 &&
-      newConfeccion.unidades
-    ) {
-      dataConfeccion.update((data) => [...data, newConfeccion]);
-      dataConfeccionNew.set({
-        id: Date.now(),
-        tamañoMuestra: "",
-        descripcion: "",
-        totalesDefectuosas: "",
-        group1: "",
-        group2: "",
-        group3: "",
-        unidades: "",
-      });
-    } else {
-      alert("¡Todos los campos son obligatorios!");
-    }
-  };
-
-  /*------------------Medidas------------------------*/
   let dataMedida = writable([]);
   let dataMedidaNew = writable({
     id: Date.now(),
@@ -153,49 +87,6 @@
     unidades: "",
   });
 
-  const addMedida = (e) => {
-    e.preventDefault();
-    const newDataMedida = get(dataMedidaNew);
-    if ($edit) {
-      dataMedida.update((lista) =>
-        lista.map((reg) =>
-          reg.id === $dataMedidaNew.id ? { ...$dataMedidaNew } : reg
-        )
-      );
-      dataMedidaNew.set({
-        id: Date.now(),
-        tamañoMuestra: "",
-        group1: "",
-        descripcion: "",
-        totalesDefectuosas: "",
-        group2: "",
-        unidades: "",
-      });
-      edit.set(false);
-    } else if (
-      newDataMedida.tamañoMuestra &&
-      newDataMedida.descripcion &&
-      newDataMedida.totalesDefectuosas &&
-      newDataMedida.unidades &&
-      newDataMedida.group1 &&
-      newDataMedida.group2
-    ) {
-      dataMedida.update((data) => [...data, newDataMedida]);
-      dataMedidaNew.set({
-        id: Date.now(),
-        tamañoMuestra: "",
-        group1: "",
-        descripcion: "",
-        totalesDefectuosas: "",
-        group2: "",
-        unidades: "",
-      });
-    } else {
-      alert("¡Todos los campos son obligatorios!");
-    }
-  };
-
-  /*------------------Empaque------------------------*/
   let dataEmpaque = writable([]);
   let dataEmpaqueNew = writable({
     id: Date.now(),
@@ -252,18 +143,6 @@
   /*------------------Guarda el formulario completo------------------------*/
   let dataAll = writable({
     id: Date.now(),
-    proveedor: "",
-    referencia: "",
-    entrega: "",
-    importacion: "",
-    fecha: "",
-    marca: "",
-    ppk: "",
-    individual: "",
-    horaInicio: "",
-    horaFinal: "",
-    tipoPrenda: "",
-    po: "",
     composicionCheck: "",
     proveedorCertificadoCheck: "",
     cuidadosCheck: "",
@@ -294,6 +173,7 @@
     dataAll.update((current) => {
       return {
         ...current,
+        dataProveedor: $dataProveedor,
         tallas: $dataTalla,
         confeccion: $dataConfeccion,
         medidas: $dataMedida,
@@ -339,559 +219,31 @@
   <div class="body">
     <form onsubmit={handleSubmit} class="steps">
       <div class={$page === 1 ? "steps-item-active" : "steps-item"}>
-        <div class="Proveedor">
-          <div class="Proveedor-container">
-            <div class="Proveedor-first">
-              <Input
-                text="PROVEEDOR:"
-                type="text"
-                bind:value={$dataAll.proveedor}
-                id="proveedor"
-              />
-              <Input
-                text="REFERENCIA:"
-                type="text"
-                bind:value={$dataAll.referencia}
-                id="referencia"
-              />
-              <Input
-                text="ENTREGA:"
-                type="text"
-                bind:value={$dataAll.entrega}
-                id="entrega"
-              />
-      
-              <Input
-                text="IMPORTACIÓN:"
-                type="text"
-                bind:value={$dataAll.importacion}
-                id="importacion"
-              />
-            </div>
-      
-            <div class="Proveedor-mid">
-              <Input
-                text="FECHA:"
-                type="date"
-                bind:value={$dataAll.fecha}
-                id="fecha"
-              />
-      
-              <Input
-                text="MARCA:"
-                type="text"
-                bind:value={$dataAll.marca}
-                id="marca"
-              />
-              <Input
-                text="PPK"
-                type="text"
-                bind:value={$dataAll.ppk}
-                id="ppk"
-              />
-              <Input
-                text="INDIVIDUAL"
-                type="text"
-                bind:value={$dataAll.individual}
-                id="individual"
-              />
-            </div>
-      
-            <div class="Proveedor-end">
-              <Input
-                text="HORA INICIO:"
-                type="time"
-                bind:value={$dataAll.horaInicio}
-                id="horaInicio"
-              />
-      
-              <Input
-                text="HORA FINAL:"
-                type="time"
-                bind:value={$dataAll.horaFinal}
-                id="horaFinal"
-              />
-      
-              <Input
-                text="TIPO PRENDA:"
-                type="text"
-                bind:value={$dataAll.tipoPrenda}
-                id="tipoPrenda"
-              />
-              <Input text="PO:" type="text" bind:value={$dataAll.po} id="po" />
-            </div>
-          </div>
-      </div>
+        <Proveedor {dataProveedor} />
       </div>
 
       <div class={$page === 2 ? "steps-item-active" : "steps-item"}>
-        <div class="Tallas">
-          <div onsubmit={addTalla} class="Tallas-form">
-            <div class="Tallas-form-input">
-              <Input
-                text="Color:"
-                type="text"
-                bind:value={$dataTallaNew.color}
-                id="color"
-                required={true}
-              />
-              <Input
-                text="UND x Color:"
-                type="number"
-                bind:value={$dataTallaNew.und_x_color}
-                id="und_x_color"
-                required={true}
-              />
-              <Input
-                text="Talla"
-                type="text"
-                bind:value={$dataTallaNew.talla}
-                id="talla"
-                required={true}
-              />
-              <Input
-                text="Unidades"
-                type="number"
-                bind:value={$dataTallaNew.unidades}
-                id="unidades"
-                required={true}
-              />
-            </div>
-            <button type="button" onclick={addTalla}>+</button>
-          </div>
-          <div class="Talla-container-title">
-            <p>Color <i class="fa-solid fa-arrow-down"></i></p>
-            <p>Und x color <i class="fa-solid fa-arrow-down"></i></p>
-            <p>Talla <i class="fa-solid fa-arrow-down"></i></p>
-            <p>Unidades <i class="fa-solid fa-arrow-down"></i></p>
-            <div class="options"></div>
-          </div>
-          <div class="Talla-container-table">
-            {#if $dataTalla.length > 0}
-              {#each $dataTalla as tallas}
-                <div class="Talla-container-table-item">
-                  <p>{tallas.color}</p>
-                  <p>{tallas.und_x_color}</p>
-                  <p>{tallas.talla}</p>
-                  <p>{tallas.unidades}</p>
-                  <div class="options">
-                    <input
-                      type="button"
-                      class="edit"
-                      value="✎"
-                      onclick={(e) => {
-                        handleEdit(tallas.id, dataTalla, dataTallaNew);
-                      }}
-                    />
-                    <input
-                      type="button"
-                      class="delete"
-                      value="X"
-                      onclick={(e) => handleDelete(tallas.id, dataTalla.update)}
-                    />
-                  </div>
-                </div>
-              {/each}
-            {:else}
-              <p>Aquí verás los registros que vayas agregando.</p>
-            {/if}
-          </div>
-        </div>
+        <Tallas {dataTalla} {dataTallaNew} {edit} {handleEdit} {handleDelete} />
       </div>
 
       <div class={$page === 3 ? "steps-item-active" : "steps-item"}>
-        <div class="Confeccion">
-          <p class="Confeccion-title">Confeccion AQL:15 ó 2.5</p>
-          <div class="Confeccion-content">
-            <div onsubmit={addConfeccion}>
-              <div class="Confeccion-form-group-one">
-                <div class="Confeccion-form-group-one-left">
-                  <Input
-                    type="text"
-                    text="Tamaño muestra"
-                    bind:value={$dataConfeccionNew.tamañoMuestra}
-                    id="tamaño-muestra"
-                  />
-                </div>
-                <div class="Confeccion-form-checkbox-one">
-                  <label for="A">A</label>
-                  <input
-                    bind:group={$dataConfeccionNew.group1}
-                    type="radio"
-                    name="gr-1"
-                    class="Chexbox-style"
-                    value="A"
-                    id="A"
-                  />
-                  <label for="R">R</label>
-                  <input
-                    bind:group={$dataConfeccionNew.group1}
-                    type="radio"
-                    name="gr-1"
-                    class="Chexbox-style"
-                    id="R"
-                    value="R"
-                  />
-                </div>
-                <div class="Confeccion-form-group-one-right">
-                  <Input
-                    type="text"
-                    text="Descripción"
-                    bind:value={$dataConfeccionNew.descripcion}
-                    id="descripcion"
-                  />
-                </div>
-              </div>
-
-              <div class="Confeccion-form-group-two">
-                <div class="Confeccion-form-group-two-left">
-                  <Input
-                    type="number"
-                    text="Totales Defectuosas"
-                    bind:value={$dataConfeccionNew.totalesDefectuosas}
-                    id="totales-defectuosas"
-                  />
-                </div>
-
-                <div class="Confeccion-form-checkbox-two">
-                  <label for="pin-blando">Pin <br />Blando</label>
-                  <input
-                    bind:group={$dataConfeccionNew.group2}
-                    type="radio"
-                    name="gr-2"
-                    class="Chexbox-style"
-                    id="pin-blando"
-                    value="Blando"
-                  />
-                  <label for="pin-duro">Pin <br />Duro</label>
-                  <input
-                    bind:group={$dataConfeccionNew.group2}
-                    type="radio"
-                    name="gr-2"
-                    class="Chexbox-style"
-                    id="pin-duro"
-                    value="Duro"
-                  />
-                </div>
-                <div class="Confeccion-form-checkbox-three">
-                  <label for="AA">A</label>
-                  <input
-                    bind:group={$dataConfeccionNew.group3}
-                    type="radio"
-                    name="gr-3"
-                    class="Chexbox-style"
-                    value="AA"
-                    id="AA"
-                  />
-                  <label for="RR">R</label>
-                  <input
-                    bind:group={$dataConfeccionNew.group3}
-                    type="radio"
-                    name="gr-3"
-                    class="Chexbox-style"
-                    value="RR"
-                    id="RR"
-                  />
-                </div>
-                <div class="Confeccion-form-group-two-right">
-                  <Input
-                    type="number"
-                    text="Unidades"
-                    bind:value={$dataConfeccionNew.unidades}
-                    id="unidades"
-                  />
-                  <button type="button" onclick={addConfeccion}>+</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="Confeccion-container-title">
-              <div class="title-one">
-                <p class="title-text">
-                  Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
-                </p>
-              </div>
-              <div class="Confeccion-title-two">
-                <p class="title-text">A</p>
-                <p class="title-text">R</p>
-              </div>
-              <div class="Confeccion-title-three">
-                <p class="title-text">Totales Defectuosas</p>
-                <p class="title-text">Pin</p>
-              </div>
-              <div class="Confeccion-title-four">
-                <p class="title-text">A</p>
-                <p class="title-text">R</p>
-              </div>
-              <p class="title-text-description">Descripción</p>
-              <p class="title-text-unidades">Unidades x Descrip</p>
-              <div
-                style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
-              >
-                ...
-            </div>
-            </div>
-            {#each $dataConfeccion as confeccion}
-            <div class="Confeccion-container-table">
-                <div class="title-one">
-                  <p class="title-text">{confeccion.tamañoMuestra}</p>
-                </div>
-                  <div class="Confeccion-title-two">
-                    <input
-                      type="radio"
-                      class="Chexbox-style"
-                      id="A"
-                      disabled
-                      checked={confeccion.group1 === "A"}
-                    />
-                    <input
-                      type="radio"
-                      class="Chexbox-style"
-                      id="R"
-                      disabled
-                      checked={confeccion.group1 === "R"}
-                    />
-                  </div>
-                <div class="Confeccion-title-three">
-                  <p class="title-text">{confeccion.totalesDefectuosas}</p>
-                  <p class="title-text">
-                    {confeccion.pinDuro ? "Duro" : "Blando"}
-                    </p>
-                </div>
-                  <div class="Confeccion-title-four">
-                    <input
-                      type="radio"
-                      class="Chexbox-style"
-                      id="check-all"
-                      value="AA"
-                      disabled
-                      checked={confeccion.group3 === "AA"}
-                    />
-                    <input
-                      type="radio"
-                      class="Chexbox-style"
-                      id="check-all"
-                      value="RR"
-                      disabled
-                      checked={confeccion.group3 === "RR"}
-                    />
-                  </div>
-                <p class="title-text-description">{confeccion.descripcion}</p>
-                <p class="title-text-unidades">{confeccion.unidades}</p>
-                <div
-                  style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
-                >
-                    <input
-                    style="font-size: 11px;"
-                      type="button"
-                      class="edit"
-                      value="✎"
-                      onclick={(e) => {
-                        handleEdit(
-                          confeccion.id,
-                          dataConfeccion,
-                          dataConfeccionNew
-                        );
-                      }}
-                    />
-                    <input
-                      type="button"
-                      class="delete"
-                      value="X"
-                      onclick={(e) => {
-                        handleDelete(confeccion.id, dataConfeccion.update);
-                      }}
-                    />
-                  </div>
-                </div>
-              {/each}
-          </div>
-        </div>
+        <Confeccion
+          {dataConfeccion}
+          {dataConfeccionNew}
+          {edit}
+          {handleEdit}
+          {handleDelete}
+        />
       </div>
 
       <div class={$page === 4 ? "steps-item-active" : "steps-item"}>
-        <div class="Medidas">
-          <p class="Medidas-title">Medidas: Nivel inspec: 1 ó s-4</p>
-          <div class="Medidas-content">
-            <div onsubmit={addMedida}>
-              <div class="Medidas-form-group-one">
-                <div class="Medidas-form-group-one-left">
-                  <Input
-                    type="text"
-                    text="Tamaño muestra"
-                    id="tamañoMuestra"
-                    bind:value={$dataMedidaNew.tamañoMuestra}
-                  />
-                </div>
-                <div class="Medidas-form-checkbox-one">
-                  <label for="AMedida">A</label>
-                  <input
-                    type="radio"
-                    class="Chexbox-style"
-                    name="group1"
-                    id="A"
-                    value="A"
-                    bind:group={$dataMedidaNew.group1}
-                  />
-                  <label for="RMedida">R</label>
-                  <input
-                    type="radio"
-                    class="Chexbox-style"
-                    name="group1"
-                    id="R"
-                    value="R"
-                    bind:group={$dataMedidaNew.group1}
-                  />
-                </div>
-                <div class="Medidas-form-group-one-right">
-                  <Input
-                    type="text"
-                    text="Descripción de defecto"
-                    bind:value={$dataMedidaNew.descripcion}
-                    id="descripcion"
-                  />
-                </div>
-              </div>
-
-              <div class="Medidas-form-group-two">
-                <div class="Medidas-form-group-two-left">
-                  <Input
-                    type="number"
-                    text="Unid. total problemas de medidas"
-                    bind:value={$dataMedidaNew.totalesDefectuosas}
-                    id="totalesDefectuosas"
-                  />
-                </div>
-                <div class="Medidas-form-checkbox-three">
-                  <label for="AA">A</label>
-                  <input
-                    type="radio"
-                    name="group2"
-                    class="Chexbox-style"
-                    id="AA"
-                    value="AA"
-                    bind:group={$dataMedidaNew.group2}
-                  />
-                  <label for="RR">R</label>
-                  <input
-                    type="radio"
-                    name="group2"
-                    class="Chexbox-style"
-                    id="RR"
-                    value="RR"
-                    bind:group={$dataMedidaNew.group2}
-                  />
-                </div>
-                <div class="Medidas-form-group-two-right">
-                  <Input
-                    type="number"
-                    text="Unidades"
-                    bind:value={$dataMedidaNew.unidades}
-                    id="unidades"
-                  />
-                  <button type="button" onclick={addMedida}>+</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="Medidas-container-title">
-              <div class="Medidas-title-one">
-                <p class="Medidas-title-text">
-                  Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
-                </p>
-              </div>
-              <div class="Medidas-title-two">
-                <p class="Medidas-title-text">A</p>
-                <p class="Medidas-title-text">R</p>
-              </div>
-              <div class="Medidas-title-three">
-                <p class="Medidas-title-text">Totales Defectuosas</p>
-              </div>
-              <div class="Medidas-title-four">
-                <p class="Medidas-title-text">A</p>
-                <p class="Medidas-title-text">R</p>
-              </div>
-              <p class="Medidas-title-text-description">Descripción</p>
-              <p class="Medidas-title-text-unidades">Unidades x Descrip</p>
-              <div
-                style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
-              >
-                ...
-              </div>
-            </div>
-            {#each $dataMedida as medida}
-              <div class="Medidas-container-table">
-                <div class="Medidas-title-one">
-                  <p class="Medidas-title-text">{medida.tamañoMuestra}</p>
-                </div>
-                <div class="Medidas-title-two">
-                  <input
-                    type="radio"
-                    class="Chexbox-style"
-                    id="A"
-                    value="A"
-                    disabled
-                    checked={medida.group1 === "A"}
-                  />
-                  <input
-                    type="radio"
-                    class="Chexbox-style"
-                    id="R"
-                    value="R"
-                    disabled
-                    checked={medida.group1 === "R"}
-                  />
-                </div>
-                <div class="Medidas-title-three">
-                  <p class="Medidas-title-text">{medida.totalesDefectuosas}</p>
-                </div>
-                <div class="Medidas-title-four">
-                  <input
-                    type="radio"
-                    class="Chexbox-style"
-                    id="AA"
-                    value="AA"
-                    disabled
-                    checked={medida.group2 === "AA"}
-                  />
-                  <input
-                    type="radio"
-                    class="Chexbox-style"
-                    id="RR"
-                    value="RR"
-                    disabled
-                    checked={medida.group2 === "RR"}
-                  />
-                </div>
-                <p class="Medidas-title-text-description">
-                  {medida.descripcion}
-                </p>
-                <p class="Medidas-title-text-unidades">{medida.unidades}</p>
-                <div
-                  style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
-                >
-                  <input
-                    style="font-size: 11px;"
-                    type="button"
-                    class="edit"
-                    value="✎"
-                    onclick={(e) => {
-                      handleEdit(medida.id, dataMedida, dataMedidaNew);
-                    }}
-                  />
-                  <input
-                    type="button"
-                    class="delete"
-                    value="X"
-                    onclick={(e) => {
-                      handleDelete(medida.id, dataMedida.update);
-                    }}
-                  />
-                </div>
-              </div>
-            {/each}
-          </div>
-        </div>
+        <Medidas
+          {dataMedida}
+          {dataMedidaNew}
+          {edit}
+          {handleEdit}
+          {handleDelete}
+        />
       </div>
 
       <div class={$page === 5 ? "steps-item-active" : "steps-item"}>
@@ -1535,10 +887,7 @@
     width: 100%;
     height: 100%;
   }
-
-  .Tallas,
-  .DetalleEmpaque,
-  .Proveedor {
+  .DetalleEmpaque {
     width: calc(100%-78px);
     height: auto;
     display: flex;
@@ -1548,23 +897,12 @@
     border-radius: 6px;
     padding: 29px 39px;
   }
-  .Tallas-form,
-  .Proveedor-container {
+  .Tallas-form {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
     justify-content: space-between;
-  }
-  .Proveedor-first,
-  .Proveedor-mid,
-  .Proveedor-end {
-    width: 30%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    justify-content: space-around;
   }
 
   .Tallas-form-input {
@@ -2075,19 +1413,6 @@
     .Header-content-button {
       font-size: 11px;
       width: 20%;
-    }
-
-    .Proveedor-container {
-      display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap: 15px;
-      padding: 10px 15px;
-    }
-    .Proveedor-first,
-    .Proveedor-mid,
-    .Proveedor-end {
-      width: 100%;
-      margin-bottom: 10px;
     }
 
     .Medidas-form-group-two-left,
