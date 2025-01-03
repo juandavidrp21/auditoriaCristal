@@ -156,7 +156,7 @@
         </div>
       </div>
     </div>
-
+    {#if $dataConfeccion.length >= 1}
     <div class="Confeccion-container-title">
       <div class="title-one">
         <p class="title-text">
@@ -169,20 +169,26 @@
       </div>
       <div class="Confeccion-title-three">
         <p class="title-text">Totales Defectuosas</p>
+      </div>
+      <div class="Confeccion-title-five">
         <p class="title-text">Pin</p>
       </div>
+      
       <div class="Confeccion-title-four">
         <p class="title-text">A</p>
         <p class="title-text">R</p>
       </div>
+
       <p class="title-text-description">Descripción</p>
-      <p class="title-text-unidades">Unidades x Descrip</p>
-      <div
-        style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
-      >
-        ...
+      <p class="title-text-unidades">Unds x Descrip</p>
+
+      <div class="options">
       </div>
     </div>
+    {:else}
+      <p style="margin-top: 50px;" class="message">Sin datos para mostrar.</p>
+    {/if}
+
     {#each $dataConfeccion as confeccion}
       <div class="Confeccion-container-table">
         <div class="title-one">
@@ -206,10 +212,13 @@
         </div>
         <div class="Confeccion-title-three">
           <p class="title-text">{confeccion.totalesDefectuosas}</p>
+        </div>
+        <div class="Confeccion-title-five">
           <p class="title-text">
             {confeccion.pinDuro ? "Duro" : "Blando"}
           </p>
         </div>
+        
         <div class="Confeccion-title-four">
           <input
             type="radio"
@@ -230,9 +239,7 @@
         </div>
         <p class="title-text-description">{confeccion.descripcion}</p>
         <p class="title-text-unidades">{confeccion.unidades}</p>
-        <div
-          style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
-        >
+        <div class="options">
           <input
             style="font-size: 11px;"
             type="button"
@@ -305,6 +312,12 @@
     font-weight: bold;
     border: none;
     background-color: #00b0a7;
+  }
+  .options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 5%;
   }
 
   .Confeccion {
@@ -417,20 +430,19 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  }
+  .Confeccion-container-title{
+    margin-top: 35px;
   }
   .Confeccion-container-table {
     margin: 0px 0px;
   }
   .title-one {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 14%;
-    padding-right: 4px;
+    width: 11%;
+    justify-content: center;
   }
+  .message,
   .title-text {
     color: #888;
     font-family: Inter;
@@ -438,6 +450,9 @@
     font-style: normal;
     font-weight: 500;
     line-height: 18px;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
   .Confeccion-title-two,
   .Confeccion-title-four {
@@ -457,15 +472,23 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
-    width: 12%;
-    padding: 0px 10px;
+    width: 8%;
+    height: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  .Confeccion-title-five{
+    display: flex;
+    width: 7%;
+    text-align: center;
+    justify-content: center;
   }
   .title-text-description {
-    width: 42%;
+    width: 38%;
     padding: 0px 10px;
     text-align: start;
     color: #888;
+    text-align: center;
   }
   .title-text-unidades {
     width: 8%;
