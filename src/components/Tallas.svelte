@@ -74,21 +74,29 @@
     </div>
     <button type="button" onclick={addTalla}>+</button>
   </div>
-  <div class="Talla-container-title">
-    <p>Color <i class="fa-solid fa-arrow-down"></i></p>
-    <p>Und x color <i class="fa-solid fa-arrow-down"></i></p>
-    <p>Talla <i class="fa-solid fa-arrow-down"></i></p>
-    <p>Unidades <i class="fa-solid fa-arrow-down"></i></p>
-    <div class="options"></div>
-  </div>
-  <div class="Talla-container-table">
-    {#if $dataTalla.length > 0}
+  {#if $dataTalla.length > 0}
+    <div class="Talla-container-title">
+      <div class="container-item">
+        <p>Color <i class="fa-solid fa-arrow-down"></i></p>
+      </div>
+      <div class="container-item">
+        <p>Und x color <i class="fa-solid fa-arrow-down"></i></p>
+      </div>
+      <div class="container-item">
+        <p>Talla <i class="fa-solid fa-arrow-down"></i></p>
+      </div>
+      <div class="container-item">
+        <p>Unidades <i class="fa-solid fa-arrow-down"></i></p>
+      </div>
+      <div class="options">Opciones</div>
+    </div>
+    <div class="Talla-container-table">
       {#each $dataTalla as tallas}
         <div class="Talla-container-table-item">
-          <p>{tallas.color}</p>
-          <p>{tallas.und_x_color}</p>
-          <p>{tallas.talla}</p>
-          <p>{tallas.unidades}</p>
+          <div class="container-item"><p>{tallas.color}</p></div>
+          <div class="container-item"><p>{tallas.und_x_color}</p></div>
+          <div class="container-item"><p>{tallas.talla}</p></div>
+          <div class="container-item"><p>{tallas.unidades}</p></div>
           <div class="options">
             <input
               type="button"
@@ -107,10 +115,10 @@
           </div>
         </div>
       {/each}
-    {:else}
-      <p>Aquí verás los registros que vayas agregando.</p>
-    {/if}
-  </div>
+    </div>
+  {:else}
+    <p class="message">Aquí verás los registros que vayas agregando.</p>
+  {/if}
 </div>
 
 <style>
@@ -137,6 +145,7 @@
     flex-direction: row;
     align-items: center;
     width: calc(100% - 35px);
+    margin-bottom: 20px;
   }
 
   .Tallas-form button {
@@ -148,17 +157,25 @@
     font-weight: bold;
     border: none;
     background-color: #00b0a7;
-    margin-left: 50px;
   }
-
+  .Talla-container-table-item,
   .Talla-container-title {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 5px;
     border-bottom: 1px solid #eaecf0;
-    justify-content: space-between;
+    justify-content: space-around;
   }
+
+  .container-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+  }
+
+  .Talla-container-table-item p,
   .Talla-container-title p {
     color: #667085;
     font-family: Inter;
@@ -176,15 +193,6 @@
   .Talla-container-table {
     display: flex;
     flex-direction: column;
-  }
-  .Talla-container-table-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 5px;
-    border-bottom: 1px solid #eaecf0;
-    align-items: center;
-    justify-content: space-between;
   }
   .Talla-container-table p {
     color: #667085;
@@ -223,14 +231,32 @@
   .options {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 70px;
+    justify-content: space-around;
+    width: 10%;
+    color: #667085;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
   }
 
   .Talla-container-table-item input {
     border: 2px solid #00b0a7;
     padding: 0px 2px;
     border-radius: 5px;
+  }
+
+  .message {
+    color: #888;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
   @media (max-width: 930px) {
     .Tallas-form-input {

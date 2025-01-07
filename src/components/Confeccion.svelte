@@ -157,36 +157,37 @@
       </div>
     </div>
     {#if $dataConfeccion.length >= 1}
-    <div class="Confeccion-container-title">
-      <div class="title-one">
-        <p class="title-text">
-          Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
-        </p>
-      </div>
-      <div class="Confeccion-title-two">
-        <p class="title-text">A</p>
-        <p class="title-text">R</p>
-      </div>
-      <div class="Confeccion-title-three">
-        <p class="title-text">Totales Defectuosas</p>
-      </div>
-      <div class="Confeccion-title-five">
-        <p class="title-text">Pin</p>
-      </div>
-      
-      <div class="Confeccion-title-four">
-        <p class="title-text">A</p>
-        <p class="title-text">R</p>
-      </div>
+      <div class="Confeccion-container-title">
+        <div class="title-one">
+          <p class="title-text">
+            Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
+          </p>
+        </div>
+        <div class="Confeccion-title-two">
+          <p class="title-text">A</p>
+          <p class="title-text">R</p>
+        </div>
+        <div class="Confeccion-title-three">
+          <p class="title-text">Totales Defectuosas</p>
+        </div>
+        <div class="Confeccion-title-five">
+          <p class="title-text">Pin</p>
+        </div>
 
-      <p class="title-text-description">Descripción</p>
-      <p class="title-text-unidades">Unds x Descrip</p>
+        <div class="Confeccion-title-four">
+          <p class="title-text">A</p>
+          <p class="title-text">R</p>
+        </div>
 
-      <div class="options">
+        <p class="title-text-description">Descripción</p>
+        <p class="title-text-unidades">Unds x Descrip</p>
+
+        <div class="options"></div>
       </div>
-    </div>
     {:else}
-      <p style="margin-top: 50px;" class="message">Sin datos para mostrar.</p>
+      <p style="margin-top: 50px;" class="message">
+        Aquí verás los registros que vayas agregando.
+      </p>
     {/if}
 
     {#each $dataConfeccion as confeccion}
@@ -218,7 +219,7 @@
             {confeccion.pinDuro ? "Duro" : "Blando"}
           </p>
         </div>
-        
+
         <div class="Confeccion-title-four">
           <input
             type="radio"
@@ -431,7 +432,7 @@
     justify-content: space-between;
     align-items: center;
   }
-  .Confeccion-container-title{
+  .Confeccion-container-title {
     margin-top: 35px;
   }
   .Confeccion-container-table {
@@ -477,7 +478,7 @@
     text-align: center;
     justify-content: center;
   }
-  .Confeccion-title-five{
+  .Confeccion-title-five {
     display: flex;
     width: 7%;
     text-align: center;
