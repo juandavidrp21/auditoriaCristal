@@ -94,7 +94,7 @@
         <div class="Medidas-form-group-two-left">
           <Input
             type="number"
-            text="Unid. total problemas de medidas"
+            text="total problemas de medidas"
             bind:value={$dataMedidaNew.totalesDefectuosas}
             id="totalesDefectuosas"
           />
@@ -130,162 +130,107 @@
         </div>
       </div>
     </div>
-
-    <div class="Medidas-container-title">
-      <div class="Medidas-title-one">
-        <p class="Medidas-title-text">
-          Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
-        </p>
-      </div>
-      <div class="Medidas-title-two">
-        <p class="Medidas-title-text">A</p>
-        <p class="Medidas-title-text">R</p>
-      </div>
-      <div class="Medidas-title-three">
-        <p class="Medidas-title-text">Totales Defectuosas</p>
-      </div>
-      <div class="Medidas-title-four">
-        <p class="Medidas-title-text">A</p>
-        <p class="Medidas-title-text">R</p>
-      </div>
-      <p class="Medidas-title-text-description">Descripción</p>
-      <p class="Medidas-title-text-unidades">Unidades x Descrip</p>
-      <div
-        style="width: 5%; height: 100%; margin-left: 20px; text-align: center; font-size: 28px;"
-      >
-        ...
-      </div>
-    </div>
-    {#each $dataMedida as medida}
-      <div class="Medidas-container-table">
-        <div class="Medidas-title-one">
-          <p class="Medidas-title-text">{medida.tamañoMuestra}</p>
+    {#if $dataMedida.length >= 1}
+      <div class="Medidas-container-title">
+        <div class="container-item">
+          <p>Tamaño muestra</p>
         </div>
         <div class="Medidas-title-two">
-          <input
-            type="radio"
-            class="Chexbox-style"
-            id="A"
-            value="A"
-            disabled
-            checked={medida.group1 === "A"}
-          />
-          <input
-            type="radio"
-            class="Chexbox-style"
-            id="R"
-            value="R"
-            disabled
-            checked={medida.group1 === "R"}
-          />
+          <p class="Medidas-title-text">A</p>
+          <p class="Medidas-title-text">R</p>
         </div>
-        <div class="Medidas-title-three">
-          <p class="Medidas-title-text">{medida.totalesDefectuosas}</p>
+        <div class="container-item">
+          <p>Totales Defectuosas</p>
         </div>
         <div class="Medidas-title-four">
-          <input
-            type="radio"
-            class="Chexbox-style"
-            id="AA"
-            value="AA"
-            disabled
-            checked={medida.group2 === "AA"}
-          />
-          <input
-            type="radio"
-            class="Chexbox-style"
-            id="RR"
-            value="RR"
-            disabled
-            checked={medida.group2 === "RR"}
-          />
+          <p class="Medidas-title-text">A</p>
+          <p class="Medidas-title-text">R</p>
         </div>
-        <p class="Medidas-title-text-description">
-          {medida.descripcion}
-        </p>
-        <p class="Medidas-title-text-unidades">{medida.unidades}</p>
-        <div
-          style="width: 5%; height: 100%; margin-left: 20px; justify-content: space-between; align-items: center; display: flex;"
-        >
-          <input
-            style="font-size: 11px;"
-            type="button"
-            class="edit"
-            value="✎"
-            onclick={(e) => {
-              handleEdit(medida.id, dataMedida, dataMedidaNew);
-            }}
-          />
-          <input
-            type="button"
-            class="delete"
-            value="X"
-            onclick={(e) => {
-              handleDelete(medida.id, dataMedida.update);
-            }}
-          />
+        <div class="container-item">
+          <p>Descripción</p>
         </div>
+        <div class="container-item">
+          <p>Unidades x Descrip</p>
+        </div>
+        <div class="options">Opciones</div>
       </div>
-    {/each}
+      {#each $dataMedida as medida}
+        <div class="Medidas-container-table">
+          <div class="container-item">
+            <p>{medida.tamañoMuestra}</p>
+          </div>
+          <div class="Medidas-title-two">
+            <input
+              type="radio"
+              class="Chexbox-style"
+              id="A"
+              value="A"
+              disabled
+              checked={medida.group1 === "A"}
+            />
+            <input
+              type="radio"
+              class="Chexbox-style"
+              id="R"
+              value="R"
+              disabled
+              checked={medida.group1 === "R"}
+            />
+          </div>
+          <div class="container-item">
+            <p>{medida.totalesDefectuosas}</p>
+          </div>
+          <div class="Medidas-title-four">
+            <input
+              type="radio"
+              class="Chexbox-style"
+              id="AA"
+              value="AA"
+              disabled
+              checked={medida.group2 === "AA"}
+            />
+            <input
+              type="radio"
+              class="Chexbox-style"
+              id="RR"
+              value="RR"
+              disabled
+              checked={medida.group2 === "RR"}
+            />
+          </div>
+          <div class="container-item">
+            <p>
+              {medida.descripcion}
+            </p>
+          </div>
+          <div class="container-item">
+            <p>{medida.unidades}</p>
+          </div>
+          <div class="options">
+            <input
+              type="button"
+              class="edit"
+              value="✎"
+              onclick={(e) => {
+                handleEdit(medida.id, dataMedida, dataMedidaNew);
+              }}
+            />
+            <input
+              type="button"
+              class="delete"
+              value="X"
+              onclick={(e) => handleDelete(medida.id, dataMedida.update)}
+            />
+          </div>
+        </div>
+      {/each}
+    {:else}
+      <p class="message">Aquí verás los registros que vayas agregando.</p>
+    {/if}
   </div>
 </div>
 
 <style>
-  .Chexbox-style {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #00b0a7;
-    border-radius: 3px;
-    margin-right: 5%;
-    position: relative;
-    cursor: pointer;
-  }
-  .Chexbox-style:checked {
-    background-color: #00b0a7;
-  }
-  .Chexbox-style:checked::after {
-    content: "✓";
-    color: white;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-  }
-  .delete:hover {
-    cursor: pointer;
-    background-color: rgb(165, 80, 80);
-    color: white;
-    border: 2px solid red;
-    border-radius: 5px;
-  }
-  .edit:hover {
-    cursor: pointer;
-    background-color: rgb(61, 117, 61);
-    color: white;
-    border: 2px solid green;
-    border-radius: 5px;
-  }
-  .edit,
-  .delete {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    background-color: #00b0a7;
-  }
-  .options {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 70px;
-  }
-
   .Medidas {
     margin-top: 35px;
     position: relative;
@@ -317,6 +262,23 @@
     width: 100%;
     height: 100%;
   }
+
+  .container-item {
+    color: #888;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    width: 16%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
   .Medidas-form-group-one {
     display: flex;
     flex-direction: row;
@@ -349,10 +311,6 @@
     display: flex;
     width: 25%;
   }
-  .Medidas-container-title p i {
-    color: #667085;
-    font-size: 10px;
-  }
   .Medidas-form-checkbox-three {
     width: 10%;
     display: flex;
@@ -381,35 +339,17 @@
   }
   .Medidas-container-title,
   .Medidas-container-table {
-    border-bottom: 1px solid #cfd1d8;
-    width: 100%;
-    height: 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  .Medidas-container-table {
-    margin: 0px 0px;
-  }
-  .Medidas-title-one {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    width: 14%;
-    padding-right: 4px;
+    border-bottom: 1px solid #eaecf0;
+    justify-content: space-around;
   }
-  .Medidas-title-text {
-    color: #888;
-    font-family: Inter;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 18px;
+
+  .Medidas-container-title{
+    margin-top: 30px;
   }
+
   .Medidas-title-two,
   .Medidas-title-four {
     display: flex;
@@ -424,25 +364,78 @@
     padding: 0px 2px;
     border-radius: 5px;
   }
-  .Medidas-title-three {
+
+  .Chexbox-style {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00b0a7;
+    border-radius: 3px;
+    margin-right: 5%;
+    position: relative;
+    cursor: pointer;
+  }
+  .Chexbox-style:checked {
+    background-color: #00b0a7;
+  }
+  .Chexbox-style:checked::after {
+    content: "✓";
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+  }
+  .delete:hover {
+    cursor: pointer;
+    background-color: rgb(165, 80, 80);
+    color: white;
+    border-radius: 5px;
+  }
+  .edit:hover {
+    cursor: pointer;
+    background-color: rgb(61, 117, 61);
+    color: white;
+    border: 2px solid green;
+    border-radius: 5px;
+  }
+  .edit,
+  .delete {
+    width: 28px;
+    height: 28px;
+    border-radius: 15%;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    background-color: #00b0a7;
+  }
+  .options {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-around;
-    width: 12%;
-    padding: 0px 10px;
-  }
-  .Medidas-title-text-description {
-    width: 42%;
-    padding: 0px 10px;
-    text-align: start;
-    color: #888;
+    width: 10%;
+    color: #667085;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
   }
 
-  .Medidas-title-text-unidades {
-    width: 8%;
-    text-align: center;
+  .message {
     color: #888;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 45px;
   }
 
   @media (max-width: 930px) {
@@ -451,6 +444,7 @@
     .Medidas-form-group-one-left,
     .Medidas-form-group-one {
       flex-direction: column;
+      width: 100%;
     }
 
     .Medidas-form-group-two-right,

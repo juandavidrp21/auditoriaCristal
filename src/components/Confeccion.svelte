@@ -158,8 +158,8 @@
     </div>
     {#if $dataConfeccion.length >= 1}
       <div class="Confeccion-container-title">
-        <div class="title-one">
-          <p class="title-text">
+        <div class="container-item">
+          <p>
             Tamaño muestra &nbsp; <i class="fa-solid fa-arrow-down"></i>
           </p>
         </div>
@@ -167,11 +167,11 @@
           <p class="title-text">A</p>
           <p class="title-text">R</p>
         </div>
-        <div class="Confeccion-title-three">
-          <p class="title-text">Totales Defectuosas</p>
+        <div class="container-item">
+          <p>Totales Defectuosas</p>
         </div>
-        <div class="Confeccion-title-five">
-          <p class="title-text">Pin</p>
+        <div class="container-item">
+          <p>Pin</p>
         </div>
 
         <div class="Confeccion-title-four">
@@ -179,10 +179,14 @@
           <p class="title-text">R</p>
         </div>
 
-        <p class="title-text-description">Descripción</p>
-        <p class="title-text-unidades">Unds x Descrip</p>
+        <div class="container-item">
+          <p>Descripción</p>
+        </div>
+        <div class="container-item">
+          <p>Unds x Descrip</p>
+        </div>
 
-        <div class="options"></div>
+        <div class="options">Opciones</div>
       </div>
     {:else}
       <p style="margin-top: 50px;" class="message">
@@ -192,8 +196,8 @@
 
     {#each $dataConfeccion as confeccion}
       <div class="Confeccion-container-table">
-        <div class="title-one">
-          <p class="title-text">{confeccion.tamañoMuestra}</p>
+        <div class="container-item">
+          <p>{confeccion.tamañoMuestra}</p>
         </div>
         <div class="Confeccion-title-two">
           <input
@@ -211,11 +215,11 @@
             checked={confeccion.group1 === "R"}
           />
         </div>
-        <div class="Confeccion-title-three">
-          <p class="title-text">{confeccion.totalesDefectuosas}</p>
+        <div class="container-item">
+          <p>{confeccion.totalesDefectuosas}</p>
         </div>
-        <div class="Confeccion-title-five">
-          <p class="title-text">
+        <div class="container-item">
+          <p>
             {confeccion.pinDuro ? "Duro" : "Blando"}
           </p>
         </div>
@@ -238,8 +242,8 @@
             checked={confeccion.group3 === "RR"}
           />
         </div>
-        <p class="title-text-description">{confeccion.descripcion}</p>
-        <p class="title-text-unidades">{confeccion.unidades}</p>
+        <p class="container-item">{confeccion.descripcion}</p>
+        <p class="container-item">{confeccion.unidades}</p>
         <div class="options">
           <input
             style="font-size: 11px;"
@@ -265,62 +269,6 @@
 </div>
 
 <style>
-  .Chexbox-style {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #00b0a7;
-    border-radius: 3px;
-    margin-right: 5%;
-    position: relative;
-    cursor: pointer;
-  }
-  .Chexbox-style:checked {
-    background-color: #00b0a7;
-  }
-  .Chexbox-style:checked::after {
-    content: "✓";
-    color: white;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-  }
-
-  .delete:hover {
-    cursor: pointer;
-    background-color: rgb(165, 80, 80);
-    color: white;
-    border: 2px solid red;
-    border-radius: 5px;
-  }
-  .edit:hover {
-    cursor: pointer;
-    background-color: rgb(61, 117, 61);
-    color: white;
-    border: 2px solid green;
-    border-radius: 5px;
-  }
-  .edit,
-  .delete {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border: none;
-    background-color: #00b0a7;
-  }
-  .options {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 5%;
-  }
-
   .Confeccion {
     margin-top: 35px;
     position: relative;
@@ -426,23 +374,35 @@
   .Confeccion-container-table {
     border-bottom: 1px solid #cfd1d8;
     width: 100%;
-    height: 50px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
   .Confeccion-container-title {
-    margin-top: 35px;
+    margin-top: 30px;
   }
   .Confeccion-container-table {
     margin: 0px 0px;
   }
-  .title-one {
+
+  .options,
+  .container-item {
+    color: #888;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    width: 14%;
+    height: 100%;
+    text-align: center;
     display: flex;
-    width: 11%;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
   }
+
   .message,
   .title-text {
     color: #888;
@@ -469,32 +429,61 @@
     padding: 0px 2px;
     border-radius: 5px;
   }
-  .Confeccion-title-three {
+
+  .Chexbox-style {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00b0a7;
+    border-radius: 3px;
+    margin-right: 5%;
+    position: relative;
+    cursor: pointer;
+  }
+  .Chexbox-style:checked {
+    background-color: #00b0a7;
+  }
+  .Chexbox-style:checked::after {
+    content: "✓";
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+  }
+
+  .delete:hover {
+    cursor: pointer;
+    background-color: rgb(165, 80, 80);
+    color: white;
+    border: 2px solid red;
+    border-radius: 5px;
+  }
+  .edit:hover {
+    cursor: pointer;
+    background-color: rgb(61, 117, 61);
+    color: white;
+    border: 2px solid green;
+    border-radius: 5px;
+  }
+  .edit,
+  .delete {
+    width: 25px;
+    height: 25px;
+    border-radius: 15%;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    background-color: #00b0a7;
+  }
+  .options {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    justify-content: space-around;
     width: 8%;
-    height: 100%;
-    text-align: center;
-    justify-content: center;
-  }
-  .Confeccion-title-five {
-    display: flex;
-    width: 7%;
-    text-align: center;
-    justify-content: center;
-  }
-  .title-text-description {
-    width: 38%;
-    padding: 0px 10px;
-    text-align: start;
-    color: #888;
-    text-align: center;
-  }
-  .title-text-unidades {
-    width: 8%;
-    text-align: center;
-    color: #888;
   }
 
   @media (max-width: 930px) {
@@ -536,8 +525,28 @@
     .Confeccion-form-group-two-right button {
       margin: 0px 20px;
     }
-    .title-text-description {
-      width: 30%;
-    }
+
+  .options,
+  .container-item {
+    color: #888;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    width: 12%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 9%;
+  }
   }
 </style>
