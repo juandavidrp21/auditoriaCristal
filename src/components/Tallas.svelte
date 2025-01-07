@@ -74,10 +74,10 @@
     </div>
     <button type="button" onclick={addTalla}>+</button>
   </div>
-  {#if $dataTalla.length > 0}
+  {#if $dataTalla.length >= 1}
     <div class="Talla-container-title">
       <div class="container-item">
-        <p>Color <i class="fa-solid fa-arrow-down"></i></p>
+        <p>Color<i class="fa-solid fa-arrow-down"></i></p>
       </div>
       <div class="container-item">
         <p>Und x color <i class="fa-solid fa-arrow-down"></i></p>
@@ -257,6 +257,7 @@
     height: 100%;
     display: flex;
     align-items: center;
+    margin-top: 30px;
   }
   @media (max-width: 930px) {
     .Tallas-form-input {

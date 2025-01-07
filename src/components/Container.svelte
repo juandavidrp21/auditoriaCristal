@@ -185,24 +185,25 @@
           {edit}
           {handleEdit}
           {handleDelete}
-          />
+        />
       </div>
 
       <div class={$page === 6 ? "steps-item-active" : "steps-item"}>
-        <DetalleEmpaque {dataAll}/>
+        <DetalleEmpaque {dataAll} />
       </div>
 
       <div class={$page === 7 ? "steps-item-active" : "steps-item"}>
-        <Ppp {dataAll} {handleSubmit}/>
+        <Ppp {dataAll} {handleSubmit} />
       </div>
     </form>
   </div>
 
   <div class="Footer">
-    <button onclick={handleBack}
-      ><i class="fa-solid fa-arrow-left"></i> Anterior
+    <button class={$page === 1 ? "off":"on"} onclick={handleBack}>
+      <i class="fa-solid fa-arrow-left"></i>
+      Anterior
     </button>
-    <button onclick={handleNext}
+    <button class={$page === 7 ? "off":"on"} onclick={handleNext}
       >Siguiente <i class="fa-solid fa-arrow-right"></i></button
     >
   </div>
@@ -259,7 +260,7 @@
     justify-content: space-between;
   }
 
-  .Footer button {
+  .on {
     width: 120px;
     height: 100%;
     border-radius: 5px;
@@ -275,10 +276,16 @@
     margin: 0px 100px;
     cursor: pointer;
   }
-  .Footer button:hover {
+  .on:hover {
     background-color: white;
     color: #00b0a7;
     border: 2px solid #00b0a7;
   }
+
+  .off{
+    visibility: hidden;
+  }
+
+
 
 </style>
