@@ -117,14 +117,12 @@
     .Proveedor-container {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
-      gap: 15px;
       padding: 10px 15px;
     }
     .Proveedor-first,
     .Proveedor-mid,
     .Proveedor-end {
       width: 100%;
-      margin-bottom: 10px;
     }
   }
 </style>

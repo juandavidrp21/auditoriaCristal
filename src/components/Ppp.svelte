@@ -150,4 +150,11 @@
       margin: 0px 100px;
       cursor: pointer;
     }
+
+    @media (max-width: 730px){
+      .PPP-content-one{
+        flex-direction: column;
+        width: 100%;
+      }
+    }
     </style>

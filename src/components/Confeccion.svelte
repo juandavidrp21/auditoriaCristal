@@ -152,7 +152,7 @@
             bind:value={$dataConfeccionNew.unidades}
             id="unidades"
           />
-          <button type="button" onclick={addConfeccion}>+</button>
+          <input class="addFile" type="button" onclick={addConfeccion}/>
         </div>
       </div>
     </div>
@@ -249,7 +249,6 @@
             style="font-size: 11px;"
             type="button"
             class="edit"
-            value="✎"
             onclick={(e) => {
               handleEdit(confeccion.id, dataConfeccion, dataConfeccionNew);
             }}
@@ -257,7 +256,6 @@
           <input
             type="button"
             class="delete"
-            value="X"
             onclick={(e) => {
               handleDelete(confeccion.id, dataConfeccion.update);
             }}
@@ -359,10 +357,16 @@
     align-items: center;
     justify-content: space-between;
   }
-  .Confeccion-form-group-two-right button {
+  
+  .addFile {
+    cursor: pointer;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
     color: white;
     font-size: 20px;
     font-weight: bold;
@@ -370,6 +374,17 @@
     background-color: #00b0a7;
     margin-left: 50px;
   }
+
+  .addFile:hover {
+    background-color: white;
+    border: 2px solid #00b0a7;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="black"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
   .Confeccion-container-title,
   .Confeccion-container-table {
     border-bottom: 1px solid #cfd1d8;
@@ -454,31 +469,52 @@
     font-size: 14px;
   }
 
-  .delete:hover {
-    cursor: pointer;
-    background-color: rgb(165, 80, 80);
-    color: white;
-    border: 2px solid red;
-    border-radius: 5px;
+  
+  .delete:hover{
+    background-color: white;
+    border: 2px solid #00b0a7;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" fill="black"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .edit:hover {
-    cursor: pointer;
-    background-color: rgb(61, 117, 61);
-    color: white;
-    border: 2px solid green;
-    border-radius: 5px;
+  .edit:hover{
+    background-color: white;
+    border: 2px solid #00b0a7;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="undefined"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" fill="black"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .edit,
-  .delete {
+  .edit{
+    cursor: pointer;
     width: 25px;
     height: 25px;
     border-radius: 15%;
-    color: white;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="undefined"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" fill="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
     font-size: 18px;
     font-weight: bold;
     border: none;
     background-color: #00b0a7;
   }
+  .delete {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    border-radius: 15%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" fill="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    background-color: #00b0a7;
+  }
+
   .options {
     display: flex;
     flex-direction: row;
@@ -506,7 +542,7 @@
     }
     .Confeccion-form-checkbox-two {
       margin: 10px 13px;
-      width: 30%;
+      width: 60%;
       padding: 5px 0px;
       justify-content: space-around;
       border-left: none;
@@ -522,10 +558,6 @@
       border-right: none;
       border-bottom: 1px solid #dedddd;
     }
-    .Confeccion-form-group-two-right button {
-      margin: 0px 20px;
-    }
-
   .options,
   .container-item {
     color: #888;

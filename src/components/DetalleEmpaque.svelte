@@ -336,30 +336,6 @@
 </div>
 
 <style>
-  .Chexbox-style {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #00b0a7;
-    border-radius: 3px;
-    margin-right: 5%;
-    position: relative;
-    cursor: pointer;
-  }
-  .Chexbox-style:checked {
-    background-color: #00b0a7;
-  }
-  .Chexbox-style:checked::after {
-    content: "✓";
-    color: white;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-  }
-  
   .DetalleEmpaque {
     width: calc(100%-78px);
     height: auto;
@@ -376,21 +352,21 @@
     flex-direction: row;
     width: 100%;
     height: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 
   .DetalleEmpaque-content-left {
-    width: 30%;
+    width: 50%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 
   .DetalleEmpaque-left-item {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
   }
 
@@ -403,19 +379,19 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    width: 71%;
+    width: 40%;
   }
 
   .DetalleEmpaque-left-item-checks {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     width: 25%;
   }
 
   .DetalleEmpaque-content-right {
-    width: 66%;
+    width: 45%;
     height: 100%;
     padding: 20px 0px;
   }
@@ -447,30 +423,62 @@
 
   .DetalleEmpaque-mid-inputs {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
   }
 
   .Detalle-Empaque-right-end {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 100%;
   }
+  
+  .Chexbox-style {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00b0a7;
+    border-radius: 3px;
+    margin-right: 5%;
+    position: relative;
+    cursor: pointer;
+  }
+  .Chexbox-style:checked {
+    background-color: #00b0a7;
+  }
+  .Chexbox-style:checked::after {
+    content: "✓";
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+  }
+  @media (max-width: 1250px) {
+    .Detalle-Empaque-right-end {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
 
   @media (max-width: 930px) {
     .DetalleEmpaque-content-left {
-      width: 50%;
+      width: 60%;
     }
     .DetalleEmpaque-content-right {
-      width: 45%;
+      width: 35%;
     }
 
-    .Detalle-Empaque-right-end,
-    .DetalleEmpaque-mid-inputs {
-      width: 100%;
-      flex-direction: column;
+    .DetalleEmpaque-left-item p {
+      width: 60%;
+    }
+    .DetalleEmpaque-left-item-checks {
+      width: 35%;
     }
   }
 </style>

@@ -25,7 +25,7 @@
   >
   <button
     class={$page === 6 ? "active-header" : "Header-content-button"}
-    onclick={() => ($page = 6)}>Detalle de Empaque</button
+    onclick={() => ($page = 6)}>Detalle</button
   >
   <button
     class={$page === 7 ? "active-header" : "Header-content-button"}
@@ -75,14 +75,22 @@
     font-family: "DM Sans", sans-serif;
   }
 
-  @media (max-width: 930px) {
+  @media (max-width: 985px) {
     .Header {
       justify-content: space-around;
     }
     .active-header,
     .Header-content-button {
-      font-size: 11px;
+      font-size: 14px;
       width: 20%;
     }
   }
+  @media (max-width: 700px) {
+    .active-header,
+    .Header-content-button {
+      font-size: 12px;
+      transition: 0.3s ease-in;
+    }
+  }
+
 </style>

@@ -72,7 +72,7 @@
         required={true}
       />
     </div>
-    <button type="button" onclick={addTalla}>+</button>
+    <input class="addFile" type="button" onclick={addTalla}/>
   </div>
   {#if $dataTalla.length >= 1}
     <div class="Talla-container-title">
@@ -101,7 +101,6 @@
             <input
               type="button"
               class="edit"
-              value="✎"
               onclick={(e) => {
                 handleEdit(tallas.id, dataTalla, dataTallaNew);
               }}
@@ -109,7 +108,6 @@
             <input
               type="button"
               class="delete"
-              value="X"
               onclick={(e) => handleDelete(tallas.id, dataTalla.update)}
             />
           </div>
@@ -138,6 +136,8 @@
     width: 100%;
     height: 100%;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
   }
 
   .Tallas-form-input {
@@ -145,19 +145,33 @@
     flex-direction: row;
     align-items: center;
     width: calc(100% - 35px);
-    margin-bottom: 20px;
   }
 
-  .Tallas-form button {
+  .addFile {
+    cursor: pointer;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
     color: white;
     font-size: 20px;
     font-weight: bold;
     border: none;
     background-color: #00b0a7;
   }
+  .addFile:hover {
+    background-color: white;
+    border: 2px solid #00b0a7;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="black"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
   .Talla-container-table-item,
   .Talla-container-title {
     display: flex;
@@ -203,26 +217,46 @@
     line-height: 18px;
     margin-right: 16%;
   }
-  .delete:hover {
-    cursor: pointer;
-    background-color: rgb(165, 80, 80);
-    color: white;
-    border: 2px solid red;
-    border-radius: 5px;
+
+  .delete:hover{
+    background-color: white;
+    border: 2px solid #00b0a7;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" fill="black"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .edit:hover {
-    cursor: pointer;
-    background-color: rgb(61, 117, 61);
-    color: white;
-    border: 2px solid green;
-    border-radius: 5px;
+  .edit:hover{
+    background-color: white;
+    border: 2px solid #00b0a7;
+    border-radius: 15%;
+    transition: fill 0.3s ease;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="undefined"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" fill="black"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
   }
-  .edit,
-  .delete {
+  .edit{
+    cursor: pointer;
     width: 25px;
     height: 25px;
-    border-radius: 50%;
-    color: white;
+    border-radius: 15%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="undefined"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" fill="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    background-color: #00b0a7;
+  }
+  .delete {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    border-radius: 15%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" fill="white"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
     font-size: 18px;
     font-weight: bold;
     border: none;
@@ -259,9 +293,17 @@
     align-items: center;
     margin-top: 30px;
   }
-  @media (max-width: 930px) {
+  @media (max-width: 975px) {
     .Tallas-form-input {
       flex-direction: column;
     }
+    .Tallas-form{
+      flex-direction: column;
+      align-items: start;
+    }
+    .addFile{
+      margin: 20px 20px 0px 20px;
+    }
   }
+  
 </style>

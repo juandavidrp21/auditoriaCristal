@@ -203,8 +203,9 @@
       <i class="fa-solid fa-arrow-left"></i>
       Anterior
     </button>
+
     <button class={$page === 7 ? "off":"on"} onclick={handleNext}
-      >Siguiente <i class="fa-solid fa-arrow-right"></i></button
+      >Siguiente<i class="fa-solid fa-arrow-right"></i></button
     >
   </div>
 </div>
@@ -250,7 +251,7 @@
 
   .Footer {
     width: 100%;
-    height: 30px;
+    height: 35px;
     background-color: white;
     font-family: "Roboto", sans-serif;
     display: flex;
@@ -261,7 +262,7 @@
   }
 
   .on {
-    width: 120px;
+    width: 12%;
     height: 100%;
     border-radius: 5px;
     border: none;
@@ -275,7 +276,12 @@
     line-height: normal;
     margin: 0px 100px;
     cursor: pointer;
-  }
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  } 
+
   .on:hover {
     background-color: white;
     color: #00b0a7;
@@ -286,6 +292,26 @@
     visibility: hidden;
   }
 
+  @media (max-width: 984px) {
+    
+    .on {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    transition: 0.3s ease-in;
+    }
 
+    .Footer {
+    height: 45px;
+    transition: 0.3s ease-in;
+    }
+  }
+  @media (max-width: 750px) {
+    .on {
+      font-size: 14px;
+      transition: 0.3s ease-in;
+    }
+  }
 
 </style>
