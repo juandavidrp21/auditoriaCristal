@@ -12,7 +12,6 @@
     position: relative;
     width: 100%;
     display: flex;
-    margin: 10px;
   }
 
   .label {

@@ -15,8 +15,4 @@
     font-family: "Roboto", sans-serif;
   }
   
-  .app {
-    padding: 20px 50px;
-  }
-
 </style>
