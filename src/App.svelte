@@ -1,10 +1,11 @@
 <script>
   import Container from "./components/Container.svelte";
+  import Pdf from "./components/Pdf.svelte";
 
 </script>
 
 <div class="app">
-  <Container />
+  <Pdf/>
 </div>
 
 <style>
